@@ -55,7 +55,7 @@ The schedule will gradually be completed over the next days. The detailed schedu
 |:-----:|:-------:|-----------|-------------|------|------|------|
 | Prework | | your own pace | check the Prework and Software Requirements instructions | | |
 | Prework | | day before the workshop | download the course material from the GitHub repo | | | 
-| Module 2 | Session 1   | 9.30 - 9.50  | Basics of trees | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#tree-basic |  | |
+| Module 2 | Session 1   | 9.30 - 9.50  | Basics of trees | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#tree-basic) |  | |
 | | | 9.50 - 10.10 | Toy example for regression | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#toy-regr) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/2_toy_regression.R) |
 | | | 10.10 - 10.30 | Pruning via cross-validation | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#prune-tree) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/3_pruning_crossval.R) | |
 | | | 10.10 - 10.30 | Pruning via cross-validation (cont.) | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#prune-tree) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/3_pruning_crossval.R) | |
