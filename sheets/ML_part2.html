@@ -285,7 +285,7 @@ We create subgroups via .KULbginline[simple yes-no questions].
 A tree then predicts the output in a .hi-pink[leaf node] as follows:
 
   + average of the response for regression
-  + majority voting for classification
+  + majority voting for classification.
   
 Different types of nodes:
 
@@ -735,18 +735,19 @@ How to .KULbginline[prune?]
 
 
 
-Minimize a .KULbginline[penalized loss function] during training:
-  `$$\min\{f_{\textrm{loss}} + \alpha |T|\}$$`
+Look for the smallest subtree that minimizes a .KULbginline[penalized loss function]:
+  `$$\min\{f_{\textrm{loss}} + \alpha \cdot |T|\}$$`
   + loss function `\(f_{\textrm{loss}}\)`
   + complexity parameter `\(\alpha\)`
   + number of leaf nodes `\(|T|\)`.
 
 A shallow tree results when `\(\alpha\)` is large and a deep tree when `\(\alpha\)` is small.
   
-Perform .hi-pink[cross-validation] on the parameter `\(\alpha\)`
-  + `cp` is the complexity parameter in {rpart}.
+Perform .hi-pink[cross-validation] on the complexity parameter: 
+  + `cp` is the complexity parameter in {rpart}
+  + `cp` is `\(\alpha\)` divided by `\(f_{\text{loss}}\)` evaluated in root node.
   
-Same idea as the lasso from {glmnet} in .KULbginline[Module 1].
+Cfr. tuning of the regularization paramater in lasso from {glmnet} in .KULbginline[Module 1].
 ]
 
 ---
@@ -1254,7 +1255,7 @@ How to deal with claim counts in a decision tree?
 Use the .KULbginline[Poisson deviance] as .hi-pink[loss function]:
  
 `$$\begin{eqnarray*}
-D^{\textrm{Poi}} = \frac{2}{n} \sum_{i=1}^{n} \color{#FFA500}{y}_i \cdot \ln \frac{\color{#FFA500}{y}_i}{\textrm{expo}_i \cdot \hat{\color{#3b3b9a}{f}}(\color{#e64173}{x}_i)} - \{\color{#FFA500}{y}_i - \textrm{expo}_i \cdot \hat{\color{#3b3b9a}{f}}(\color{#e64173}{x}_i)\},
+D^{\textrm{Poi}} = 2 \cdot \sum_{i=1}^{n} \color{#FFA500}{y}_i \cdot \ln \frac{\color{#FFA500}{y}_i}{\textrm{expo}_i \cdot \hat{\color{#3b3b9a}{f}}(\color{#e64173}{x}_i)} - \{\color{#FFA500}{y}_i - \textrm{expo}_i \cdot \hat{\color{#3b3b9a}{f}}(\color{#e64173}{x}_i)\},
 \end{eqnarray*}$$`
 
 with `\(\textrm{expo}\)` the exposure measure.
