@@ -8,8 +8,8 @@ Course materials for the *Hands-on Machine Learning in R* course
 Instituut.
 
 📆 Module 1 on December 10 and 17, 2020, Module 2 on Jan 14 and 21, 2021
-and Module 3 on Jan 28 and Feb 4, 2021 <br> 🕑 From 9.30 am to 12.30 pm
-or from 1.30 pm to 4.30 pm <br> 📌 online, organized by Actuarieel
+and Module 3 on Jan 28 and Feb 4, 2021 <br> ⏲ From 9.30 am to 12.30 pm
+or from 1.30 pm to 4.30 pm <br> 📍 online, organized by Actuarieel
 Instituut
 
 Course materials will be posted in the week before the workshop. You are
@@ -69,7 +69,7 @@ detailed schedule is subject to small changes.
 | :------: | :-------: | ----------------------- | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------- | ----------- |
 | Prework  |           | your own pace           | check the Prework and Software Requirements instructions |                                                                                                                    |                                                                                                                |             |
 | Prework  |           | day before the workshop | download the course material from the GitHub repo        |                                                                                                                    |                                                                                                                |             |
-| Module 2 | Session 1 | 9.30 - 9.50             | Basics of trees                                          | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#tree)          |                                                                                                                |             |
+| Module 2 | Session 1 | 9.30 - 9.50             | Basics of trees                                          | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#16)            |                                                                                                                |             |
 |          |           | 9.50 - 10.10            | Toy example for regression                               | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#toy-regr)      | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/2_toy_regression.R)     |             |
 |          |           | 10.10 - 10.30           | Pruning via cross-validation                             | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#prune-tree)    | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/3_pruning_crossval.R)   |             |
 |          |           | 10.10 - 10.30           | Pruning via cross-validation (cont.)                     | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#prune-tree)    | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/3_pruning_crossval.R)   |             |
