@@ -243,7 +243,7 @@ background-position: left
 
 <br>
 
-<img src = "img/NAAJ.png" height = "350px" />
+<img src = "img/naaj.png" height = "350px" />
 
 ]
 
