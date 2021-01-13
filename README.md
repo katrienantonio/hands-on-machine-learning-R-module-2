@@ -8,7 +8,7 @@ Course materials for the *Hands-on Machine Learning in R* course
 Instituut.
 
 📆 Module 1 on December 10 and 17, 2020, Module 2 on Jan 14 and 21, 2021
-and Module 3 on Jan 28 and Feb 4, 2021 <br> 🕟 From 9.30 am to 12.30 pm
+and Module 3 on Jan 28 and Feb 4, 2021 <br> 🕑 From 9.30 am to 12.30 pm
 or from 1.30 pm to 4.30 pm <br> 📌 online, organized by Actuarieel
 Instituut
 
