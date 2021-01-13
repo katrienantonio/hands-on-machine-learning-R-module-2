@@ -98,23 +98,31 @@ name: why-this-course # inspired by Grant McDermott intro lecture
 
 # Why this course?
 
-### The goals of this module .font140[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M505.05 19.1a15.89 15.89 0 0 0-12.2-12.2C460.65 0 435.46 0 410.36 0c-103.2 0-165.1 55.2-211.29 128H94.87A48 48 0 0 0 52 154.49l-49.42 98.8A24 24 0 0 0 24.07 288h103.77l-22.47 22.47a32 32 0 0 0 0 45.25l50.9 50.91a32 32 0 0 0 45.26 0L224 384.16V488a24 24 0 0 0 34.7 21.49l98.7-49.39a47.91 47.91 0 0 0 26.5-42.9V312.79c72.59-46.3 128-108.4 128-211.09.1-25.2.1-50.4-6.85-82.6zM384 168a40 40 0 1 1 40-40 40 40 0 0 1-40 40z"/&gt;&lt;/svg&gt;]
+### The goals of this course .font140[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M505.05 19.1a15.89 15.89 0 0 0-12.2-12.2C460.65 0 435.46 0 410.36 0c-103.2 0-165.1 55.2-211.29 128H94.87A48 48 0 0 0 52 154.49l-49.42 98.8A24 24 0 0 0 24.07 288h103.77l-22.47 22.47a32 32 0 0 0 0 45.25l50.9 50.91a32 32 0 0 0 45.26 0L224 384.16V488a24 24 0 0 0 34.7 21.49l98.7-49.39a47.91 47.91 0 0 0 26.5-42.9V312.79c72.59-46.3 128-108.4 128-211.09.1-25.2.1-50.4-6.85-82.6zM384 168a40 40 0 1 1 40-40 40 40 0 0 1-40 40z"/&gt;&lt;/svg&gt;]
 
 --
 
-* develop foundations of working with .KULbginline[regression and decision trees]
+* develop practical .KULbginline[machine learning (ML) foundations]
 
 --
 
-* step from simple trees to ensembles of trees, with .KULbginline[bagging] and .KULbginline[boosting]
+* .KULbginline[fill in the gaps] left by traditional training in actuarial science or econometrics
 
 --
 
-* focus on the use of these ML methods for the .KULbginline[analysis of frequency + severity data] 
+* focus on the use of ML methods for the .KULbginline[analysis of frequency + severity data], but also .KULbginline[non-standard data] such as images 
 
 --
 
-* discuss and construct some useful .KULbginline[interpretation tools], e.g. variable importance plots, partial dependence plots.
+* .KULbginline[explore] a substantial range of .KULbginline[methods (and data types)] (from GLMs to deep learning), but - most importantly - .KULbginline[build foundation] so that you can explore other methods (and data types) yourself. 
+
+--
+
+&lt;br&gt;
+
+&gt; *"In short, we will cover things that we wish someone had taught us in our undergraduate programs."* 
+&gt; &lt;br&gt;
+&gt; .font80[This quote is from the [Data science for economists course](http://github.com/uo-ec607/lectures) by Grant McDermott.]
 
 ---
 
@@ -126,40 +134,15 @@ name: why-this-course # inspired by Grant McDermott intro lecture
 
 * [Decision tree](#tree)
 
-  - what is tree-based machine learning?
-  - tree basics: structure, terminology, growing process
-  - using {rpart}
-  - pruning via cross-validation
-  - examples on regression and classification
-  - modelling claim frequency and severity data with trees
-  
-* [Interpretation tools](#interpret)
-
- - feature importance
- - partial dependence plot
- - the {vip} and {pdp} packages
-
 ]
 
 .pull-right[
 
 * [Bagging](#bag) 
 
- - from a single tree to Bootstrap Aggregating
- - out-of-bag error
-
 * [Random forest](#rf)
 
- - from bagging to random forests
- - tuning
-
 * [Gradient boosting](#gb)
-
- - (stochastic) gradient boosting with trees
- - training process and tuning parameters
- - using {gbm}
- - modelling claim frequencies and severities
- - using {xgboost}
 
 ]
 
@@ -182,37 +165,9 @@ background-position: left
 
 ---
 
-# Background reading
-
-.left-column[
-
-&lt;br&gt;
-
-&lt;img src = "img/NAAJ.png" height = "350px" /&gt;
-
-]
-
-.right-column[
-
-Henckaerts et al. (2020) paper on [Boosting insights in insurance tariff plans with tree-based machine learning methods](https://katrienantonio.github.io/publication/2020-boosting/)
-
-- full algorithmic details of regression trees, bagging, random forests and gradient boosting machines
-- with focus on claim frequency and severity modelling
-- including interpretation tools (VIP, PDP, ICE, H-statistic)
-- model comparison (GLMs, GAMs, trees, RFs, GBMs) 
-- managerial tools (e.g. loss ratio, discrimination power).
-
-The paper comes with two notebooks, see [examples tree-based paper](https://github.com/henckr/treeML) and [severity modelling](https://github.com/henckr/sevtree).
-
-The paper comes with an R package for fitting random forests on insurance data, see [distRforest](https://github.com/henckr/distRforest).
-
-]
-
----
-
 # What is tree-based machine learning?
 
-.KULbginline[Machine learning (ML)] according to [Wikipedia](https://en.wikipedia.org/wiki/Machine_learning):
+* .KULbginline[Machine learning (ML)] according to [Wikipedia](https://en.wikipedia.org/wiki/Machine_learning):
 
 &gt; *"Machine learning algorithms build a .hi-pink[mathematical model] based on sample data, known as training data, in order to make predictions or decisions without being explicitly programmed to perform the task."*
 
@@ -220,20 +175,18 @@ The paper comes with an R package for fitting random forests on insurance data, 
 
 --
 
-.KULbginline[Tree-based ML] makes use of a .KULbginline[tree] as building block for the mathematical model.
+* .KULbginline[Tree-based ML] makes use of a .hi-pink[tree] as building block for the mathematical model.
 
 &lt;img src="img/tree_based.png" width="70%" style="display: block; margin: auto;" /&gt;
 
 --
 
-So, a natural question to start from is: what is a .KULbginline[tree]?
+* What is a .KULbginline[tree]?
 
 ---
 
-
-
 class: inverse, center, middle
-name: tree-basic
+name: tree
 
 # Tree basics
 
@@ -251,43 +204,39 @@ background-size: contain
 
 # Tree structure and terminology
 
-The top of the tree contains all available training observations: the .hi-pink[root node].
+* Top of the tree contains all available training observations: .hi-pink[root node]
 
 --
 
-We .KULbginline[partition] the data into homogeneous non-overlapping subgroups: the .hi-pink[nodes]
+* .KULbginline[Partition] the data into homogeneous non-overlapping subgroups: .hi-pink[nodes]
 
 --
 
-We create subgroups via .KULbginline[simple yes-no questions].
+* Subgroups formed via .KULbginline[simple yes-no questions]
 
 --
 
-A tree then predicts the output in a .hi-pink[leaf node] as follows:
-
+* Tree predicts the output in a .hi-pink[leaf node] as follows:
   + average of the response for regression
   + majority voting for classification
-
 
 ---
 
 # Tree structure and terminology
 
-The top of the tree contains all available training observations: the .hi-pink[root node].
+* Top of the tree contains all available training observations: .hi-pink[root node]
 
-
-We .KULbginline[partition] the data into homogeneous non-overlapping subgroups: the .hi-pink[nodes].
+* .KULbginline[Partition] the data into homogeneous non-overlapping subgroups: .hi-pink[nodes]
 
 &lt;img src="img/tree_example.jpg" width="50%" style="float:right; padding:10px" style="display: block; margin: auto;" /&gt;
 
-We create subgroups via .KULbginline[simple yes-no questions].
+* Subgroups formed via .KULbginline[simple yes-no questions]
 
-A tree then predicts the output in a .hi-pink[leaf node] as follows:
-
+* Tree predicts the output in a .hi-pink[leaf node] as follows:
   + average of the response for regression
   + majority voting for classification
   
-Different types of nodes:
+* Different types of nodes:
 
 &lt;img src="img/tree_legend.jpg" width="27%" style="display: block; margin: auto;" /&gt;
 
@@ -296,34 +245,34 @@ Different types of nodes:
 
 # Tree growing process
 
-
-A golden standard is the .KULbginline[C]lassification .KULbginline[A]nd .KULbginline[R]egression .KULbginline[T]ree algorithm: .KULbginline[CART] (Breiman et al., 1984).
-
---
-
-CART uses .KULbginline[binary recursive partitioning] to split the data in subgroups.
+* Golden standard is the .hi-pink[c]lassification .hi-pink[a]nd .hi-pink[r]egression .hi-pink[t]ree algorithm: .KULbginline[CART]
 
 --
 
-In each node, we search for the best feature to partition the data into two regions: R&lt;sub&gt;1&lt;/sub&gt; and R&lt;sub&gt;2&lt;/sub&gt; (hence, .KULbginline[binary]).
+* CART uses .KULbginline[binary recursive partitioning] to split the data in subgroups
 
 --
 
-.font140[.KULbginline[Take-away]] .font160[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] &amp;nbsp; - &amp;nbsp; what is .KULbginline[best?] 
-
-Minimize the .KULbginline[overall loss] between observed responses and leaf node prediction
-  + overall loss = loss in region R&lt;sub&gt;1&lt;/sub&gt; + loss in region R&lt;sub&gt;2&lt;/sub&gt;
-  + for regression: mean squared or absolute error, deviance,...
-  + for classification: cross-entropy, Gini index,...
+* At each node, search for the best feature to partition the data in two regions: R&lt;sub&gt;1&lt;/sub&gt; and R&lt;sub&gt;2&lt;/sub&gt; (hence, .hi-pink[binary])
 
 --
 
-After splitting the data, this process is repeated for region R&lt;sub&gt;1&lt;/sub&gt; and R&lt;sub&gt;2&lt;/sub&gt; separately (hence, .KULbginline[recursive]).
+* .KULbginline[ Best?] Minimize the overall loss between observed responses and leaf node prediction
+  + overall loss = loss in R&lt;sub&gt;1&lt;/sub&gt; + loss in R&lt;sub&gt;2&lt;/sub&gt;
+  + regression: mean squared/absolute error, deviance,...
+  + classification: cross-entropy, gini index,...
 
 --
 
-Repeat until .KULbginline[stopping criterion] is satisfied, e.g., maximum depth of a tree or minimum loss improvement.
+* After splitting the data, this process is repeated for region R&lt;sub&gt;1&lt;/sub&gt; and R&lt;sub&gt;2&lt;/sub&gt; separately (hence, .hi-pink[recursive])
 
+--
+
+* Repeat until .hi-pink[stopping criterion] is satisfied, e.g., maximum depth of a tree or minimum loss improvement
+
+--
+
+* CART is implemented in the {rpart} package .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z"/&gt;&lt;/svg&gt;]
 
 ---
 
@@ -335,7 +284,7 @@ rpart(formula, data, method,
       control = rpart.control(cp, maxdepth, minsplit, minbucket))
 ```
 
-* `formula`: a formula as *response ~ feature1 + feature2 + ...* &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] &amp;nbsp;&amp;nbsp; no need to include the interactions!
+* `formula`: a formula as *response ~ feature1 + feature2 + ...* &amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp;&amp;nbsp; .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] no need to include the interactions!
 
 * `data`: the observation data containing the response and features
 
@@ -350,14 +299,13 @@ rpart(formula, data, method,
 
 * `minsplit`: minimum number of observations in a node for a split to be attempted
 
-* `minbucket`: minimum number of observations in a leaf node.
+* `minbucket`: minimum number of observations in a leaf node
 
 ---
 
 class: inverse, center, middle
-name: toy-regr
 
-# Toy example of a regression tree
+# Toy example for regression
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
@@ -399,7 +347,7 @@ dfr &lt;- tibble::tibble(
 
 ---
 
-# Decision stump - a tree with only one split
+# Decision stump (tree with only one split)
 
 .pull-left[
 
@@ -434,7 +382,7 @@ library(rpart.plot) # for nice plots
 ]
 
 ---
-# Decision stump - a tree with only one split
+# Decision stump (tree with only one split)
 
 .pull-left[
 
@@ -469,7 +417,7 @@ print(fit)
 
 ---
 
-# Adding splits
+# Let's add some splits
 
 .pull-left[
 
@@ -503,7 +451,7 @@ print(fit)
 
 ---
 
-# Adding splits (cont.)
+# Let's add some splits
 
 .pull-left[
 
@@ -549,17 +497,17 @@ class: clear
 
 ]
 
+--
 
 .right-column[
-Let's get familiar with the structure of a decision tree. &lt;br&gt; &lt;br&gt;
-
-.hi-pink[Q]: choose one of the trees from the previously discussed examples and pick a leaf node, but keep it simple for now.
+Let's get familiar with the structure of a decision tree. &lt;br&gt;
+Choose your favorite tree and leaf node, but keep it .hi-pink[simple] for now.
 
 1. Replicate the .KULbginline[predictions] for that leaf node, based on the split(s) and the training data.
 
 1. Replicate the .KULbginline[deviance] measure for that leaf node, based on the split(s), the training data and your predictions from Q1. 
 
-Hint: the deviance used in an anova {rpart} tree is the .hi-pink[Sum of Squared Errors (SSE)]:
+* Hint: the deviance used in an anova {rpart} tree is the .hi-pink[Sum of Squared Errors (SSE)]:
 
 `$$\begin{eqnarray*}
 \textrm{SSE} = \sum_{i=1}^n (\color{#FFA500}{y}_i - \hat{\color{#3b3b9a}{f}}(\color{#e64173}{x}_i))^2,
@@ -572,7 +520,7 @@ Hint: the deviance used in an anova {rpart} tree is the .hi-pink[Sum of Squared 
 class: clear
 
 .pull-left[
-Take for example the tree with depth two: 
+Take for example the tree with two levels:
 
 ```r
 print(fit)
@@ -589,23 +537,23 @@ print(fit)
 ##     6) x&lt; 0.535141 43   55.23637  0.47680020 *
 ##     7) x&gt;=0.535141 193  206.99550  1.49779000 *
 ```
-Let's predict the values for leaf node 6.
+Let's predict the values for leaf node 6
 ]
 
 .pull-right[
-.hi-pink[Q.1]: calculate the prediction
+.hi-pink[Q1]: calculate the prediction
 
 ```r
 # Subset observations in node 6
 obs &lt;- dfr %&gt;% dplyr::filter(x &lt; 0.535141)
 
-# Predict
+# Prediction
 pred &lt;- obs$y %&gt;%  mean
 pred
 ## [1] 0.4768002
 ```
 
-.hi-pink[Q.2]: calculate the deviance
+.hi-pink[Q2]: calculate the deviance
 
 ```r
 # Deviance
@@ -618,7 +566,7 @@ dev
 
 ---
 
-# A very deep tree
+# Let's build a very deep tree
 
 .pull-left[
 
@@ -635,11 +583,10 @@ fit &lt;- rpart(formula = y ~ x,
              )
 ```
 
-.font140[.KULbginline[Take-away]] .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] &amp;nbsp; - &amp;nbsp; understanding the `cp` parameter:
-
-  - unitless in {rpart} (different from original CART)
-  - `cp = 1` returns a .hi-pink[root node], without splits
-  - `cp = 0` returns the .hi-pink[deepest tree possible], allowed by the other stopping criteria.
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] Note on the `cp` parameter:
+* Unitless in {rpart} (different from original CART)
+  + `cp = 1` returns a .hi-pink[root node], without splits
+  + `cp = 0` returns the .hi-pink[deepest tree possible], allowed by other stopping criteria
 ]
 
 .pull-right[
@@ -648,7 +595,7 @@ fit &lt;- rpart(formula = y ~ x,
 
 ---
 
-# A very deep tree (cont.)
+# Let's build a very deep tree
 
 .pull-left[
 
@@ -666,8 +613,7 @@ fit &lt;- rpart(formula = y ~ x,
 ```
 
 &lt;br&gt; 
-
-What is your opinion on the tree shown on the right?
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;] Clearly dealing with .KULbginline[overfitting]
 
 ]
 
@@ -678,9 +624,8 @@ What is your opinion on the tree shown on the right?
 ---
 
 class: inverse, center, middle
-name: prune-tree
 
-# Pruning via cross-validation in {rpart}
+# Pruning via cross-validation
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
@@ -689,21 +634,18 @@ name: prune-tree
 #  How deep should a tree be?
 
 .pull-left[
+* Remember the .KULbginline[bias-variance tradeoff]:
+  + .hi-pink[shallow] tree: bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
+  ---&gt; .KULbginline[underfit]
+  + .hi-pink[deep] tree: bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
+  ---&gt; .KULbginline[overfit]
+  + need to find the right .KULbginline[balance] .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M256 336h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C-2.06 328.75.02 320.33.02 336H0c0 44.18 57.31 80 128 80s128-35.82 128-80zM128 176l72 144H56l72-144zm511.98 160c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0-87.12 174.26-85.04 165.84-85.04 181.51H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02zM440 320l72-144 72 144H440zm88 128H352V153.25c23.51-10.29 41.16-31.48 46.39-57.25H528c8.84 0 16-7.16 16-16V48c0-8.84-7.16-16-16-16H383.64C369.04 12.68 346.09 0 320 0s-49.04 12.68-63.64 32H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h129.61c5.23 25.76 22.87 46.96 46.39 57.25V448H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"/&gt;&lt;/svg&gt;]
 
-The .KULbginline[bias-variance trade off]:
-  - a .hi-pink[shallow] tree will underfit: 
-  &lt;br&gt;
-  bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
-  - a .hi-pink[deep] tree will overfit: 
-  &lt;br&gt;
-  bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
-  - find right .KULbginline[balance] between bias and variance!
+&lt;br&gt;
 
-Typical approach to get the right fit:
-  - fit an overly complex .KULbginline[deep tree]
-  - .KULbginline[prune] the tree to find the .KULbginline[optimal subtree].
-  
-How to .KULbginline[prune?]
+* Typical approach to get the right fit:
+  1. fit an overly complex .hi-pink[deep tree]
+  2. .KULbginline[prune] the tree to find the .hi-pink[optimal subtree]
 ]
 
 
@@ -712,41 +654,35 @@ How to .KULbginline[prune?]
 #  How deep should a tree be?
 
 .pull-left[
+* Remember the .KULbginline[bias-variance tradeoff]:
+  + .hi-pink[shallow] tree: bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
+  ---&gt; .KULbginline[underfit]
+  + .hi-pink[deep] tree: bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
+  ---&gt; .KULbginline[overfit]
+  + need to find the right .KULbginline[balance] .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M256 336h-.02c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0C-2.06 328.75.02 320.33.02 336H0c0 44.18 57.31 80 128 80s128-35.82 128-80zM128 176l72 144H56l72-144zm511.98 160c0-16.18 1.34-8.73-85.05-181.51-17.65-35.29-68.19-35.36-85.87 0-87.12 174.26-85.04 165.84-85.04 181.51H384c0 44.18 57.31 80 128 80s128-35.82 128-80h-.02zM440 320l72-144 72 144H440zm88 128H352V153.25c23.51-10.29 41.16-31.48 46.39-57.25H528c8.84 0 16-7.16 16-16V48c0-8.84-7.16-16-16-16H383.64C369.04 12.68 346.09 0 320 0s-49.04 12.68-63.64 32H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h129.61c5.23 25.76 22.87 46.96 46.39 57.25V448H112c-8.84 0-16 7.16-16 16v32c0 8.84 7.16 16 16 16h416c8.84 0 16-7.16 16-16v-32c0-8.84-7.16-16-16-16z"/&gt;&lt;/svg&gt;]
 
-The .KULbginline[bias-variance trade off]:
-  - a .hi-pink[shallow] tree will underfit: 
-  &lt;br&gt;
-  bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
-  - a .hi-pink[deep] tree will overfit: 
-  &lt;br&gt;
-  bias .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] and variance .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;] &lt;br&gt;
-  - find right .KULbginline[balance] between bias and variance!
+&lt;br&gt;
 
-Typical approach to get the right fit:
-  - fit an overly complex .KULbginline[deep tree]
-  - .KULbginline[prune] the tree to find the .KULbginline[optimal subtree].
-  
-How to .KULbginline[prune?]
-
+* Typical approach to get the right fit:
+  1. fit an overly complex .hi-pink[deep tree]
+  2. .KULbginline[prune] the tree to find the .hi-pink[optimal subtree]
 ]
 
 
 .pull-right[
-
-
-
-Minimize a .KULbginline[penalized loss function] during training:
+.KULbginline[How to prune?]
+* Minimize a .hi-pink[penalized loss function] during training:
   `$$\min\{f_{\textrm{loss}} + \alpha |T|\}$$`
   + loss function `\(f_{\textrm{loss}}\)`
   + complexity parameter `\(\alpha\)`
-  + number of leaf nodes `\(|T|\)`.
-
-A shallow tree results when `\(\alpha\)` is large and a deep tree when `\(\alpha\)` is small.
+  + number of leaf nodes `\(|T|\)`
+  + .hi-pink[shallow] tree when `\(\alpha\)` .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;]
+  + .hi-pink[deep] tree when `\(\alpha\)` .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;]
   
-Perform .hi-pink[cross-validation] on the parameter `\(\alpha\)`
-  + `cp` is the complexity parameter in {rpart}.
+* Perform .hi-pink[cross-validation] on the parameter `\(\alpha\)`
+  + `cp` is the complexity parameter in {rpart}
   
-Same idea as the lasso from {glmnet} in .KULbginline[Module 1].
+* Same idea as the .hi-pink[Lasso] and .hi-pink[glmnet] in .KULbginline[module 1]
 ]
 
 ---
@@ -876,20 +812,20 @@ class: clear
 
 ]
 
+--
 
 .right-column[
-
-.hi-pink[Q]: Trees are often associated with .KULbginline[high variance], meaning that the resulting model can be very sensitive to the input data. Let's explore this statement!
+Trees are often associated with .KULbginline[high variance], meaning that the resulting model can be very .hi-pink[sensitive] to the input data.
 
 1. Generate a second data set `dfr2` with a different seed.
 
 1. Fit an optimal tree to this data following the pruning strategy. 
 
-1. Can you spot substantial differences with the trees from before?
+1. Can you spot big differences with the trees from before?
 
 &lt;br&gt; 
 
-.hi-pink[Q.1]: a brand new data set
+.hi-pink[Q1]: a brand new data set
 
 
 ```r
@@ -910,28 +846,27 @@ class: clear
 
 
 .pull-left[
-.hi-pink[Q.2a]: optimal tree with .KULbginline[min CV error]
+.hi-pink[Q2a]: optimal tree via .KULbginline[min CV error]
 
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-41-1.png" width="85%" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-.hi-pink[Q.2b]: optimal tree with .KULbginline[one SE rule]
+.hi-pink[Q2b]: optimal tree with via .KULbginline[one SE rule]
 
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-43-1.png" width="85%" style="display: block; margin: auto;" /&gt;
 ]
 
 &lt;br&gt;
 
-.hi-pink[Q.3]: trees look .KULbginline[rather different] compared to those from before, even though they try to approximate the same function.
+.hi-pink[Q3]: trees look .KULbginline[rather different] compared to those from before, even though they try to approximate the same function
 
 
 ---
 
 class: inverse, center, middle
-name: toy-class
 
-# Toy example of a classification tree
+# Toy example for classification
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
@@ -965,7 +900,7 @@ dfc &lt;- tibble::tibble(
 
 ---
 
-# Fitting a simple tree 
+# Let's see what a simple tree does
 
 .pull-left[
 
@@ -1000,7 +935,7 @@ print(fit)
 
 ---
 
-# Fitting a simple tree (cont.)
+# Let's see what a simple tree does
 
 .pull-left[
 
@@ -1075,7 +1010,7 @@ fit &lt;- rpart(formula = y ~ x1 + x2,
              )
 ```
 &lt;br&gt; 
-Clearly .KULbginline[overfitting]!
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;] Clearly dealing with .KULbginline[overfitting] again
 ]
 
 .pull-right[
@@ -1096,20 +1031,22 @@ class: clear
 
 ]
 
+--
+
 
 .right-column[
 Let's find a satisfying fit for this classification example. &lt;br&gt;
-.hi-pink[Q]: perform .KULbginline[cross-validation] on `cp` to find the .KULbginline[optimal pruned subtree].
+Perform .hi-pink[cross-validation] on `cp` to find the .KULbginline[optimal pruned subtree].
 
-1. Set `xval = 5` in `rpart.control()` (do not forget to set a .hi-pink[seed] beforehand).
+1. Set `xval = 5` in `rpart.control()` (do not forget to set a .hi-pink[seed] beforehand)
 
-1. Graphically inspect the xval results via `plotcp()`.
+1. Graphically inspect the xval results via `plotcp()`
 
-1. Extract the xval results via `$cptable`.
+1. Extract the xval results via `$cptable`
 
-1. Apply the min xerror and/or the one SE rule to find the .hi-pink[optimal] `cp`.
+1. Apply the min xerror and/or the one se rule to find the .hi-pink[optimal] `cp`
 
-1. Show the resulting classifier graphically.
+1. Show the resulting classification graphically
 
 
 ]
@@ -1119,7 +1056,7 @@ Let's find a satisfying fit for this classification example. &lt;br&gt;
 class: clear
 
 .pull-left[
-.hi-pink[Q.1]: fit a complex tree and perform cross-validation
+.hi-pink[Q1]: fit a complex tree and perform cross-validation
 
 ```r
 set.seed(87654) # reproducibility
@@ -1138,7 +1075,7 @@ fit &lt;- rpart(formula = y ~ x1 + x2,
 ]
 
 .pull-right[
-.hi-pink[Q.2]: inspect the xval results graphically
+.hi-pink[Q2]: inspect the xval results graphically
 
 ```r
 plotcp(fit)
@@ -1152,13 +1089,13 @@ plotcp(fit)
 class: clear
 
 .pull-left[
-.hi-pink[Q.3]: extract the xval results in a table
+.hi-pink[Q3]: extract the xval results in a table
 
 ```r
 # Get xval results via 'cptable' attribute
 cpt &lt;- fit$cptable
 ```
-.hi-pink[Q.4]: optimal `cp` via min CV error or one SE rule
+.hi-pink[Q4]: optimal `cp` via min cv error or one se rule
 
 ```r
 # Which cp value do we choose?
@@ -1214,7 +1151,7 @@ print(cpt[16:35,], digits = 6)
 class: clear
 
 .pull-left[
-.hi-pink[Q.5a]: optimal subtree via .KULbginline[min CV error]
+.hi-pink[Q5a]: optimal subtree via .KULbginline[min cv error]
 
 ```r
 fit_1 &lt;- prune(fit, cp = cpt[min_xerr, 'CP'])
@@ -1223,7 +1160,7 @@ fit_1 &lt;- prune(fit, cp = cpt[min_xerr, 'CP'])
 ]
 
 .pull-right[
-.hi-pink[Q.5b]: optimal subtree via .KULbginline[one SE rule]
+.hi-pink[Q5b]: optimal subtree via .KULbginline[one se rule]
 
 ```r
 fit_2 &lt;- prune(fit, cp = cpt[se_rule, 'CP'])
@@ -1234,35 +1171,30 @@ fit_2 &lt;- prune(fit, cp = cpt[se_rule, 'CP'])
 ---
 
 class: inverse, center, middle
-name: freq-sev-tree
 
-# Claim frequency and severity modeling with {rpart}
+# Claim frequency and severity modeling
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
 ---
 
 
-# Claim frequency prediction on the MTPL data
+# Claim frequency prediction with the MTPL data
 
-Recall the MTPL data set introduced in Module 1.
+* Classic approach for .hi-pink[claim frequency]: .KULbginline[Poisson GLM]
 
-The .KULbginline[Poisson GLM] is a classic approach for modelling .KULbginline[claim frequency] data.
+* How to deal with claim counts in a decision tree?
 
-How to deal with claim counts in a decision tree?
-
-Use the .KULbginline[Poisson deviance] as .hi-pink[loss function]:
+* Use the .KULbginline[Poisson deviance] as .hi-pink[loss function]:
  
 `$$\begin{eqnarray*}
 D^{\textrm{Poi}} = \frac{2}{n} \sum_{i=1}^{n} \color{#FFA500}{y}_i \cdot \ln \frac{\color{#FFA500}{y}_i}{\textrm{expo}_i \cdot \hat{\color{#3b3b9a}{f}}(\color{#e64173}{x}_i)} - \{\color{#FFA500}{y}_i - \textrm{expo}_i \cdot \hat{\color{#3b3b9a}{f}}(\color{#e64173}{x}_i)\},
 \end{eqnarray*}$$`
 
-with `\(\textrm{expo}\)` the exposure measure.
+  * with `\(\textrm{expo}\)` the exposure measure.
 
 
 --
-
-Here we go: 
 
 
 ```r
@@ -1297,9 +1229,9 @@ print(fit)
 ```
 
 
-.font140[.KULbginline[Take-away]] .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;]  &amp;nbsp; - &amp;nbsp; .KULbginline[Poisson tree] in {rpart}: 
-  - Poisson deviance via `method = 'poisson'` &lt;br&gt;
-  - response as two-column matrix: `cbind(expo,y)`.
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] For a .KULbginline[Poisson tree] in {rpart} you must specify: &lt;br&gt;
+.hi-pink[Poisson deviance] via `method = 'poisson'` &lt;br&gt;
+.hi-pink[Response] as two-column matrix: `cbind(expo,y)`
 ]
 
 .pull-right[
@@ -1351,7 +1283,7 @@ fit &lt;- rpart(formula =
 print(fit)
 ```
 &lt;br&gt;
-Easier way to .KULbginline[understand] this tree? &lt;br&gt;
+Easier way to .hi-pink[interpret] this tree? &lt;br&gt;
 Try `rpart.plot` from the package .KULbginline[{rpart.plot}]
 
 ]
@@ -1404,23 +1336,24 @@ class: clear
 
 ]
 
+--
+
 .right-column[
 Verify whether the .KULbginline[prediction] in a leaf node is .hi-pink[what you would expect]. &lt;br&gt;
+Take the leftmost node as an example: `bm &lt; 2` and `ageph &gt;= 56`.
 
-.hi-pink[Q]: take the leftmost node as an example: `bm &lt; 2` and `ageph &gt;= 56`.
+1. Subset the data accordingly
 
-1. Subset the data accordingly.
+1. Calculate the expected claim frequency as `sum(nclaims)/sum(expo)`
 
-1. Calculate the expected claim frequency as `sum(nclaims)/sum(expo)`.
-
-1. Compare with the {rpart} prediction of 0.08899811.
+1. Compare with the {rpart} prediction of 0.08899811
 ]
 
 ---
 
 class:clear
 
-.hi-pink[Q.1-Q.2]: subset the data and calculate the claim frequency
+.hi-pink[Q1-Q2]: subset the data and calculate the claim frequency
 
 ```r
 mtpl %&gt;% 
@@ -1435,29 +1368,30 @@ mtpl %&gt;%
 ## 1 0.08898655
 ```
 
-.hi-pink[Q.3]: the prediction and our DIY calculation .KULbginline[do not match]! &lt;br&gt;
+.hi-pink[Q3]: The prediction and calculation .KULbginline[don't match]! &lt;br&gt;
 
 Is this due to a rounding error? &lt;br&gt;
-Or is there something spooky .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 384 512"&gt;&lt;path d="M186.1.09C81.01 3.24 0 94.92 0 200.05v263.92c0 14.26 17.23 21.39 27.31 11.31l24.92-18.53c6.66-4.95 16-3.99 21.51 2.21l42.95 48.35c6.25 6.25 16.38 6.25 22.63 0l40.72-45.85c6.37-7.17 17.56-7.17 23.92 0l40.72 45.85c6.25 6.25 16.38 6.25 22.63 0l42.95-48.35c5.51-6.2 14.85-7.17 21.51-2.21l24.92 18.53c10.08 10.08 27.31 2.94 27.31-11.31V192C384 84 294.83-3.17 186.1.09zM128 224c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm128 0c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z"/&gt;&lt;/svg&gt;] going on?
+Or is there something spooky going on? .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 384 512"&gt;&lt;path d="M186.1.09C81.01 3.24 0 94.92 0 200.05v263.92c0 14.26 17.23 21.39 27.31 11.31l24.92-18.53c6.66-4.95 16-3.99 21.51 2.21l42.95 48.35c6.25 6.25 16.38 6.25 22.63 0l40.72-45.85c6.37-7.17 17.56-7.17 23.92 0l40.72 45.85c6.25 6.25 16.38 6.25 22.63 0l42.95-48.35c5.51-6.2 14.85-7.17 21.51-2.21l24.92 18.53c10.08 10.08 27.31 2.94 27.31-11.31V192C384 84 294.83-3.17 186.1.09zM128 224c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32zm128 0c-17.67 0-32-14.33-32-32s14.33-32 32-32 32 14.33 32 32-14.33 32-32 32z"/&gt;&lt;/svg&gt;] 
 
 ---
 
 # Unraveling the mystery of {rpart}
 
 .pull-left[
+* Section 8.2 in the [vignette](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf) on Poisson regression 
 
-.KULbginline[Conceptually]: no events in a leaf node lead to division by zero in the deviance!
+* .KULbginline[Conceptually]: no events in a leaf node lead to division by zero in the deviance
 
-Solution: assume .KULbginline[Gamma prior] on the mean of the Poisson in the leaf nodes: 
-  + set `\(\mu = \sum y_i / \sum \textrm{expo}_i\)`
-  + use coefficient of variation `\(k = \sigma / \mu\)` as .KULbginline[user input]
-  + `\(k = 0\)` extreme .KULbginline[pessimism] (all leaf nodes equal)
-  + `\(k = \infty\)` extreme .KULbginline[optimism] (let the data speak)
-  + default in {rpart}: `\(k=1\)`.
+* Assume .KULbginline[Gamma prior] on the rates: `\(\textrm{Gamma}(\mu\)` , `\(\sigma)\)`
+  + `\(\mu = \sum y_i / \sum \textrm{expo}_i\)`
+  + .hi-pink[coefficient of variation] `\(k = \sigma / \mu\)` as .KULbginline[user input]
+  + `\(k = 0\)` extreme .hi-pink[pessimism] (all leaf nodes equal)
+  + `\(k = \infty\)` extreme .hi-pink[optimism] (let the data speak)
+  + default in {rpart}: `\(k=1\)`
   
-The resulting leaf node prediction: 
+* .KULbginline[Leaf node prediction]: 
 
-`$$\frac{\alpha + \sum Y_i}{\beta + \sum \text{expo}_i}, \,\,\,\,\,\,\, \alpha = 1/k^2, \,\,\,\,\,\,\, \beta=\alpha / \mu.$$`
+`$$\frac{\alpha + \sum Y_i}{\beta + \sum e_i}, \,\,\,\,\,\,\, \alpha = 1/k^2, \,\,\,\,\,\,\, \beta=\alpha / \mu$$`
 ]
 
 .pull-right[
@@ -1483,9 +1417,7 @@ mtpl %&gt;%
 ## 1 0.08899811
 ```
 
-More details in Section 8.2 of the [vignette](https://cran.r-project.org/web/packages/rpart/vignettes/longintro.pdf) on Poisson regression. 
-
-
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM112 223.4c3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.7 8.6-10.8 11.9-14.9 4.5l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.3 7.4-15.8 4-15.1-4.5zm250.8 122.8C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.5-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.6-16.2 38.1 4.3 24.6 20.5zm6.2-118.3l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.1 7.3-15.6 4-14.9-4.5 3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.6 8.6-11 11.9-15.1 4.5z"/&gt;&lt;/svg&gt;]  .KULbginline[Mystery solved!]
 ]
 
 ---
@@ -1508,7 +1440,7 @@ fit &lt;- rpart(formula =
              )
 ```
 &lt;br&gt;
-Notice that .KULbginline[all] leaf nodes predict the .KULbginline[same value].
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] Notice that .hi-pink[all] leaf nodes predict the .KULbginline[same value]
 ]
 
 .pull-right[
@@ -1605,16 +1537,18 @@ class: clear
 
 ]
 
+--
+
 .right-column[
-.hi-pink[Q]: Follow the .KULbginline[pruning strategy] to develop a proper frequency tree model for the MTPL data.
+Follow the .KULbginline[pruning strategy] to develop a proper frequency tree model for the .hi-pink[MTPL] data.
 
-1. Start from an overly complex tree. Do not forget your favorite random .hi-pink[seed] upfront!
+1. Start from an overly complex tree (don't forget your favorite random .hi-pink[seed] upfront)
 
-1. Inspect the cross-validation results.
+1. Inspect the cross-validation results
 
-1. Choose the `cp` value minimizing `xerror` for .KULbginline[pruning].
+1. Choose the `cp` value minimizing `xerror` for .hi-pink[pruning]
 
-1. Visualize the pruned tree with `rpart.plot`.
+1. Visualize the pruned tree with `rpart.plot`
 ]
 
 ---
@@ -1622,7 +1556,7 @@ class: clear
 class:clear
 
 .pull-left[
-.hi-pink[Q.1]: fit an overly complex tree
+.hi-pink[Q1]: fit an overly complex tree
 
 ```r
 set.seed(9753) # reproducibilty
@@ -1644,7 +1578,7 @@ fit &lt;- rpart(formula =
 ]
 
 .pull-right[
-.hi-pink[Q.2]: inspect the cross-validation results
+.hi-pink[Q2]: inspect the cross-validation results
 
 ```r
 plotcp(fit)
@@ -1657,7 +1591,7 @@ plotcp(fit)
 
 class: clear
 
-.hi-pink[Q.3]: choose the `cp` value that minimizes `xerror` for .KULbginline[pruning]
+.hi-pink[Q3]: choose the `cp` value that minimizes `xerror` for .KULbginline[pruning]
 
 ```r
 # Get the cross-validation results
@@ -1678,7 +1612,7 @@ fit_srt &lt;- prune(fit,
 
 class: clear
 
-.hi-pink[Q.4]: try to understand how the final model looks like. Can you make sense of it?
+.hi-pink[Q4]: try to understand how the final model looks like. Can you make sense of it?
 .center[
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-86-1.png" style="display: block; margin: auto;" /&gt;
 ]
@@ -1686,7 +1620,6 @@ class: clear
 ---
 
 class: inverse, center, middle
-name: interpret
 
 # Interpretation tools
 
@@ -1694,67 +1627,28 @@ name: interpret
 
 ---
 
-# Interpreting a tree model
+# Making sense of a tree model
 
 .pull-left[
+* Interpretability depends on the .KULbginline[size of the tree]
+  + .hi-pink[shallow] tree .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM112 223.4c3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.7 8.6-10.8 11.9-14.9 4.5l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.3 7.4-15.8 4-15.1-4.5zm250.8 122.8C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.5-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.6-16.2 38.1 4.3 24.6 20.5zm6.2-118.3l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.1 7.3-15.6 4-14.9-4.5 3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.6 8.6-11 11.9-15.1 4.5z"/&gt;&lt;/svg&gt;] but .hi-pink[deep] tree .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;]
+  + luckily there are some .KULbginline[tools] to aid you
 
-Interpretability depends on the .KULbginline[size of the tree]
-  + is easy with a .hi-pink[shallow] tree but hard with a .hi-pink[deep] tree 
-  + luckily there are some .KULbginline[tools] to aid you.
-
-.KULbginline[Feature importance]
+* .KULbginline[Feature importance]
   + identify the most .hi-pink[important] features
-  + implemented in the package {vip}. 
+  + implemented in the package {vip} .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z"/&gt;&lt;/svg&gt;]
 
-.KULbginline[Partial dependence plot]
+* .KULbginline[Partial dependence plot]
   + measure the .hi-pink[marginal effect] of a feature
-  + implemented in the package {pdp}.
+  + implemented in the package {pdp} .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z"/&gt;&lt;/svg&gt;]
 
-Excellent source on interpretable machine learning: [Interpretable Machine Learning](https://christophm.github.io/interpretable-ml-book/) book by Christophe Molnar.
+* Good source on interpretable machine learning: [ebook](https://christophm.github.io/interpretable-ml-book/)
 ]
 
 .pull-right[
 &lt;img src="img/logo_vip.png" width="40%" style="display: block; margin: auto;" /&gt;
 &lt;img src="img/logo_pdp.png" width="40%" style="display: block; margin: auto;" /&gt;
 ]
-
----
-
-# Feature importance and partial dependence
-
-.left-column[
-
-&lt;br&gt;
-&lt;br&gt;
-
-&lt;img src = "img/molnar.png" height = "350px" /&gt;
-
-
-
-]
-
-.right-column[
-
-With .KULbginline[feature importance]: 
-
-* sum improvements in loss function over all splits on a variable `\(x_{\ell}\)`
-* important variables appear high and often in a tree.
-
-With .KULbginline[partial dependence]: 
-
-* univariate
-
-`$$\bar{f}_{\ell}(x_{\ell}) = \frac{1}{n} \sum_{i=1}^n f_{\text{tree}}(x_{\ell},\boldsymbol{x}^{i}_{-\ell})$$`
-
-* bivariate
-
-`$$\bar{f}_{k, \ell}(x_k, x_{\ell}) = \frac{1}{n} \sum_{i=1}^n f_{\text{tree}}(x_k, x_{\ell}, \boldsymbol{x}^{i}_{-k, \ell})$$`
-
-* marginal effects, interactions can stay hidden!
-
-]
-
-
 
 ---
 
@@ -1860,8 +1754,10 @@ class: clear
 
 ]
 
+--
+
 .right-column[
-Use partial dependence plots for .hi-pink[other features] to gain .KULbginline[understanding] of your model.
+Use partial dependence plots for .hi-pink[other features] to .KULbginline[understand] your model completely.
 ]
 
 ---
@@ -1869,105 +1765,75 @@ Use partial dependence plots for .hi-pink[other features] to gain .KULbginline[u
 class:clear
 
 .pull-left[
-.KULbginline[Level in the bonus-malus scale] &lt;br&gt;
+.hi-pink[Level in the bonus-malus scale]
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-98-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 .pull-right[
-.KULbginline[Type of coverage] &lt;br&gt;
+.hi-pink[Type of coverage]
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-99-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
 ---
 
-# That's a wrap on single trees!
+# That's a wrap on decision trees!
 
 .pull-left[
 
-.font140[.KULbginline[Advantages]] &amp;nbsp; &amp;nbsp; .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm117.8-146.4c-10.2-8.5-25.3-7.1-33.8 3.1-20.8 25-51.5 39.4-84 39.4s-63.2-14.3-84-39.4c-8.5-10.2-23.7-11.5-33.8-3.1-10.2 8.5-11.5 23.6-3.1 33.8 30 36 74.1 56.6 120.9 56.6s90.9-20.6 120.9-56.6c8.5-10.2 7.1-25.3-3.1-33.8zM168 240c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160-60c-25.7 0-55.9 16.9-59.9 42.1-1.7 11.2 11.5 18.2 19.8 10.8l9.5-8.5c14.8-13.2 46.2-13.2 61 0l9.5 8.5c8.5 7.4 21.6.3 19.8-10.8-3.8-25.2-34-42.1-59.7-42.1z"/&gt;&lt;/svg&gt;]
+.KULbginline[Advantages] .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM112 223.4c3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.7 8.6-10.8 11.9-14.9 4.5l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.3 7.4-15.8 4-15.1-4.5zm250.8 122.8C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.5-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.6-16.2 38.1 4.3 24.6 20.5zm6.2-118.3l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.1 7.3-15.6 4-14.9-4.5 3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.6 8.6-11 11.9-15.1 4.5z"/&gt;&lt;/svg&gt;]
 
-* Shallow tree is easy to .KULbginline[explain] graphically.
+* Shallow tree is easy to .hi-pink[explain] graphically
 
-* Closely mirror the human .KULbginline[decision-making] process.
+* Closely mirror the human .hi-pink[decision-making] process
 
-* Handle all types of features .KULbginline[without] pre-processing.
+* Handle all types of features .hi-pink[without] pre-processing
 
-* .KULbginline[Fast] and very scalable to big data.
+* .hi-pink[Fast] and very scalable to big data
 
-* .KULbginline[Automatic] variable selection.
+* .hi-pink[Automatic] variable selection
 
-* Surrogate splits can handle .KULbginline[missing] data.
-]
-
----
-
-# That's a wrap on single trees!
-
-.pull-left[
-
-.font140[.KULbginline[Advantages]] &amp;nbsp; &amp;nbsp; .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm117.8-146.4c-10.2-8.5-25.3-7.1-33.8 3.1-20.8 25-51.5 39.4-84 39.4s-63.2-14.3-84-39.4c-8.5-10.2-23.7-11.5-33.8-3.1-10.2 8.5-11.5 23.6-3.1 33.8 30 36 74.1 56.6 120.9 56.6s90.9-20.6 120.9-56.6c8.5-10.2 7.1-25.3-3.1-33.8zM168 240c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160-60c-25.7 0-55.9 16.9-59.9 42.1-1.7 11.2 11.5 18.2 19.8 10.8l9.5-8.5c14.8-13.2 46.2-13.2 61 0l9.5 8.5c8.5 7.4 21.6.3 19.8-10.8-3.8-25.2-34-42.1-59.7-42.1z"/&gt;&lt;/svg&gt;]
-
-* Shallow tree is easy to .KULbginline[explain] graphically.
-
-* Closely mirror the human .KULbginline[decision-making] process.
-
-* Handle all types of features .KULbginline[without] pre-processing.
-
-* .KULbginline[Fast] and very scalable to big data.
-
-* .KULbginline[Automatic] variable selection.
-
-* Surrogate splits can handle .KULbginline[missing] data.
+* Surrogate splits can handle .hi-pink[missing] data
 ]
 
 .pull-right[
 
-.font140[.KULbginline[Disadvantages]] &amp;nbsp; &amp;nbsp; .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm0 448c-110.3 0-200-89.7-200-200S137.7 56 248 56s200 89.7 200 200-89.7 200-200 200zm-80-216c17.7 0 32-14.3 32-32s-14.3-32-32-32-32 14.3-32 32 14.3 32 32 32zm160-64c-17.7 0-32 14.3-32 32s14.3 32 32 32 32-14.3 32-32-14.3-32-32-32zm-80 128c-40.2 0-78 17.7-103.8 48.6-8.5 10.2-7.1 25.3 3.1 33.8 10.2 8.4 25.3 7.1 33.8-3.1 16.6-19.9 41-31.4 66.9-31.4s50.3 11.4 66.9 31.4c8.1 9.7 23.1 11.9 33.8 3.1 10.2-8.5 11.5-23.6 3.1-33.8C326 321.7 288.2 304 248 304z"/&gt;&lt;/svg&gt;]
+.KULbginline[Disdvantages] .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;]
 
-* Tree uses .KULbginline[step] functions to approximate the effect.
+* Tree uses .hi-pink[step] functions to approximate the effect
 
-* Greedy heuristic approach chooses .KULbginline[locally] optimal split (i.e., based on all previous splits).
+* Greedy heuristic approach chooses .hi-pink[locally] optimal split (i.e., based on all previous splits)
 
-* Data becomes .KULbginline[smaller] and smaller down the tree.
+* Data becomes .hi-pink[smaller] and smaller down the tree
 
-* All this results in .KULbginline[high variance] for a tree model...
+* All this results in .hi-pink[high variance] for a tree model...
 
-* ... which harms .KULbginline[predictive performance].
+* ... which harms .hi-pink[predictive performance]
 ]
-
----
-
-class: inverse, center, middle
-name: tree
-
-# From a single tree to ensembles of trees
-
-&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
 ---
 
 # Ensembles of trees
 
-Remember: prediction error = bias + variance.
+* Remember: .hi-pink[error = bias + variance]
 
 --
 
-Good .KULbginline[predictive performance] requires low bias .KULbginline[AND] low variance.
+* Good .KULbginline[predictive performance] requires low bias .hi-pink[AND] low variance
 
 --
 
-Two popular .hi-pink[ensemble] algorithms (that can be applied to any type of model, not just trees) are:
+* Two popular .hi-pink[ensemble] algorithms (that can be applied to any type of model, not just trees)
 
 --
 
-* .KULbginline[bagging]:
-  + low .hi-pink[bias] via detailed individual models (think: deep trees)
+1. .KULbginline[Bagging]:
+  + low .hi-pink[bias] via detailed individual models
   + low .hi-pink[variance] via averaging of those models
-  + .KULbginline[random forest] is a modification on bagging for trees to further improve the variance reduction.
+  + .KULbginline[random forest] is a modification on bagging for trees to improve the variance reduction
 
-* .KULbginline[boosting]:
+2. .KULbginline[Boosting]
   + low .hi-pink[variance] via simple individual models
-  + low .hi-pink[bias] by incrementing the model sequentially.
+  + low .hi-pink[bias] by incrementing the model sequentially
   
 
 ---
@@ -1980,7 +1846,9 @@ Two popular .hi-pink[ensemble] algorithms (that can be applied to any type of mo
 
 &lt;img src="img/oos_freq_poiss.png" width="50%" style="display: block; margin: auto;" /&gt;
 
-Detailed discussion in our North American Actuarial Journal (2020) paper on .KULbginline[Boosting insights in insurance tariff plans with tree-based machine learning methods]. See [Henckaerts et al. (2020)](https://arxiv.org/abs/1904.10890).
+From our paper on .KULbginline[Boosting insights in insurance tariff plans with tree-based machine learning methods]
+
+More details @ [Henckaerts et al. (2020)](https://arxiv.org/abs/1904.10890).
 
 ---
 
@@ -1988,7 +1856,7 @@ Detailed discussion in our North American Actuarial Journal (2020) paper on .KUL
 class: inverse, center, middle
 name: bag
 
-# Introducing bagging
+# Bagging introduction
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
@@ -2004,20 +1872,19 @@ background-size: contain
 # Bagging
 
 .pull-left[
+* .KULbginline[Bagging] stands for .hi-pink[B]ootstrap .hi-pink[AGG]regat.hi-pink[ING]
 
-.KULbginline[Bagging] is for .KULbginline[B]ootstrap .KULbginline[AGG]regat.KULbginline[ING].
+* Simple idea:
+  + build a lot of different .hi-pink[base learners] on bootstrapped samples of the data
+  + .hi-pink[combine] their predictions
 
-Simple idea:
-  + build a lot of different .KULbginline[base learners] on bootstrapped samples of the data
-  + .KULbginline[combine] their predictions.
+* Model .KULbginline[averaging] helps to:
+  + .hi-pink[reduce] variance
+  + .hi-pink[avoid] overfitting
 
-Model .KULbginline[averaging] helps to:
-  + reduce variance
-  + avoid overfitting.
-
-Bagging works best for .KULbginline[base learners] with:
+* Bagging works best for .KULbginline[base learners] with:
   + .hi-pink[low bias] and .hi-pink[high variance]
-  + for example: deep decison trees.
+  + for example: deep decison trees
 ]
 
 ---
@@ -2025,35 +1892,35 @@ Bagging works best for .KULbginline[base learners] with:
 # Bagging
 
 .pull-left[
+* .KULbginline[Bagging] stands for .hi-pink[B]ootstrap .hi-pink[AGG]regat.hi-pink[ING]
 
-.KULbginline[Bagging] is for .KULbginline[B]ootstrap .KULbginline[AGG]regat.KULbginline[ING].
+* Simple idea:
+  + build a lot of different .hi-pink[base learners] on bootstrapped samples of the data
+  + .hi-pink[combine] their predictions
 
-Simple idea:
-  + build a lot of different .KULbginline[base learners] on bootstrapped samples of the data
-  + .KULbginline[combine] their predictions.
+* Model .KULbginline[averaging] helps to:
+  + .hi-pink[reduce] variance
+  + .hi-pink[avoid] overfitting
 
-Model .KULbginline[averaging] helps to:
-  + reduce variance
-  + avoid overfitting.
-
-Bagging works best for .KULbginline[base learners] with:
+* Bagging works best for .KULbginline[base learners] with:
   + .hi-pink[low bias] and .hi-pink[high variance]
-  + for example: deep decison trees.
+  + for example: deep decison trees
 ]
 
 .pull-right[
 
 .KULbginline[Bagging with trees?]
 
-* Do .KULbginline[B] times:
+* Do the following .KULbginline[B] times:
   + create .hi-pink[bootstrap sample] by drawing with replacement from the original data
-  + fit a .hi-pink[deep tree] to the bootstrap sample.
+  + fit a .hi-pink[deep tree] to the bootstrap sample
   
 * .KULbginline[Combine] the predictions of the B trees
   + .hi-pink[average] prediction for regression
-  + .hi-pink[majorty] vote for classification.
+  + .hi-pink[majorty] vote for classification
   
-This is implemented in the {ipred} package, using {rpart} under the hood.
+* Implemented in the {ipred} package .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z"/&gt;&lt;/svg&gt;]
+  + uses {rpart} under the hood
 ]
 
 ---
@@ -2133,7 +2000,7 @@ fit_b1 &lt;- rpart(formula = y ~ x,
 
 &lt;br&gt;
 
-On it's own, this is a .KULbginline[noisy prediction] with very .KULbginline[high variance]!
+On it's own, this is a .hi-pink[noisy prediction] with very .KULbginline[high variance]
 ]
 
 .pull-right[
@@ -2161,7 +2028,7 @@ fit_b2 &lt;- rpart(formula = y ~ x,
 
 &lt;br&gt;
 
-Again, very .KULbginline[high variance] on it's own!
+Again, very .KULbginline[high variance] on it's own
 ]
 
 .pull-right[
@@ -2187,8 +2054,7 @@ pred &lt;- rowMeans(cbind(pred_b1,
 
 &lt;br&gt;
 
-Does it look like the prediction it's getting .KULbginline[less noisy]? 
-&lt;br&gt; &lt;br&gt;
+Does it look like the prediction it's getting .hi-pink[less noisy]? &lt;br&gt;
 In other words: .KULbginline[is variance reducing?]
 ]
 
@@ -2210,14 +2076,16 @@ class: clear
 
 ]
 
+--
+
 .right-column[
-.hi-pink[Q]: add a .KULbginline[third tree] to the .KULbginline[bagged ensemble] and inspect the predictions.
+Add a .hi-pink[third tree] to the .KULbginline[bagged ensemble] and inspect the predictions.
 
-1. Generate a .KULbginline[bootstrap sample] of the data (note: don't use the same seed as before because your bootstrap samples will be the same).
+1. Generate a .hi-pink[bootstrap sample] of the data (note: don't use the same seed as before because your bootstrap samples will be the same)
 
-1. Fit a .KULbginline[deep tree] to this bootstrap sample.
+1. Fit a .hi-pink[deep tree] to this bootstrap sample
 
-1. Make predictions for this tree and .KULbginline[average] with the others.
+1. Make predictions for this tree and .hi-pink[average] with the others.
 ]
 
 ---
@@ -2278,7 +2146,7 @@ Bagged ensemble with .hi-pink[B = 3]
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-115-1.png" style="display: block; margin: auto;" /&gt;
 ]
 
-.KULbginline[Little] variance reduction might be visible, but we clearly need .KULbginline[a lot more trees]. Let's use the {ipred} package for this!
+.KULbginline[Little] variance reduction might be visible, but we clearly need .hi-pink[a lot more trees]. Let's use the {ipred} package for this!
 
 ---
 
@@ -2294,28 +2162,28 @@ bagging(formula, data, control = rpart.control(___),
 
 * `data`: the observation data containing the response and features
 
-* `control`: options to pass to `rpart.control` for the .KULbginline[base learners]
+* `control`: options to pass to `rpart.control` for the .hi-pink[base learners]
   
-* `nbagg`: the number of bagging iterations .KULbginline[B], i.e., the number of trees in the ensemble
+* `nbagg`: the number of bagging iterations .hi-pink[B], i.e., the number of trees in the ensemble
 
 * `ns`: number of observations to draw for the bootstrap samples (often less than N to save computational time)
 
-* `coob`: a logical indicating whether an .KULbginline[out-of-bag] estimate of the error rate should be computed.
+* `coob`: a logical indicating whether an .hi-pink[out-of-bag] estimate of the error rate should be computed
 
 ---
 
 # Out-of-bag (OOB) error
 
 .pull-left[
-Bootstrap samples are constructed .KULbginline[with] replacement.
+* Bootstrap samples .KULbginline[with] replacement
 
-Some observations are .KULbginlnine[not present] in a bootstrap sample: 
+* Some observations .hi-pink[not present] in a bootstrap sample
   + they are called the .KULbginline[out-of-bag] observations
   + use those to calculate the out-of-bag (OOB) error
-  + measures .KULbginline[hold-out] error like cross-validation.
+  + measures .hi-pink[hold-out] error like cross-validation
 
-Advantage of OOB over cross-validation?
-  + the OOB error comes .KULbginline[for free] with bagging.
+* Advantage of OOB over cross-validation?
+  + the OOB error comes .KULbginline[for free] with bagging
 ]
 
 ---
@@ -2324,20 +2192,19 @@ Advantage of OOB over cross-validation?
 # Out-of-bag (OOB) error
 
 .pull-left[
-Bootstrap samples are constructed .KULbginline[with] replacement.
+* Bootstrap samples .KULbginline[with] replacement
 
-Some observations are .KULbginlnine[not present] in a bootstrap sample: 
+* Some observations .hi-pink[not present] in a bootstrap sample
   + they are called the .KULbginline[out-of-bag] observations
   + use those to calculate the out-of-bag (OOB) error
-  + measures .KULbginline[hold-out] error like cross-validation.
+  + measures .hi-pink[hold-out] error like cross-validation
 
-Advantage of OOB over cross-validation?
-  + the OOB error comes .KULbginline[for free] with bagging.
-]
+* Advantage of OOB over cross-validation?
+  + the OOB error comes .KULbginline[for free] with bagging
 ]
 
 .pull-right[
-But, is this a .KULbginline[representative] sample?
+* Is it a .hi-pink[representative] sample though?
 
 ```r
 set.seed(12345)
@@ -2347,9 +2214,9 @@ mean(x %in% sample(N,
 ## [1] 0.63349
 ```
 
-Roughly .KULbginline[37%] of observations are OOB when N is large.
+* Roughly .KULbginline[37%] of observations are OOB when N is large
 
-Even more when we sample .KULbginline[&lt; N] observations
+* Even more when we sample .hi-pink[&lt; N] observations
 
 ```r
 mean(x %in% sample(N,
@@ -2388,7 +2255,7 @@ fit &lt;- ipred::bagging(formula = y ~ x,
 pred &lt;- predict(fit, dfr)
 ```
 
-With 200 trees we can see the .KULbginline[variance reduction]! 
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM112 223.4c3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.7 8.6-10.8 11.9-14.9 4.5l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.3 7.4-15.8 4-15.1-4.5zm250.8 122.8C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.5-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.6-16.2 38.1 4.3 24.6 20.5zm6.2-118.3l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.1 7.3-15.6 4-14.9-4.5 3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.6 8.6-11 11.9-15.1 4.5z"/&gt;&lt;/svg&gt;] With 200 trees we can see the .KULbginline[variance reduction]
 ]
 
 .pull-right[
@@ -2442,10 +2309,11 @@ class: clear
 
 ]
 
+--
 
 .right-column[
-Use {ipred} to fit a .KULbginline[bagged] tree ensemble for the toy .hi-pink[classification] problem with data `dfc`. &lt;br&gt; &lt;br&gt;
-.hi-pink[Q]: experiment with the `nbagg` and `control` parameters to see their effect on the predictions. &lt;br&gt;
+Use {ipred} to fit a .KULbginline[bagged] tree ensemble for the toy .hi-pink[classification] problem with data `dfc`. &lt;br&gt;
+.hi-pink[Experiment] with the `nbagg` and `control` parameters to see their effect on the predictions. &lt;br&gt;
 
 ]
 
@@ -2453,7 +2321,7 @@ Use {ipred} to fit a .KULbginline[bagged] tree ensemble for the toy .hi-pink[cla
 
 class: clear
 
-.hi-pink[Q]: the following parameter settings seem to produce a decent fit.
+.hi-pink[Q]: these parameter settings seem to produce a decent fit
 
 .pull-left[
 
@@ -2492,7 +2360,7 @@ pred &lt;- predict(fit,
 class: inverse, center, middle
 name: bag
 
-# From bagging to random forests
+# From bagging to Random forests
 
 &lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
@@ -2500,59 +2368,59 @@ name: bag
 
 # Problem of dominant features
 
-A downside of bagging is that .KULbginline[dominant features] can cause individual trees to have a .KULbginline[similar structure]
+* A downside of bagging is that .KULbginline[dominant features] can cause individual trees to have a .hi-pink[similar structure]
   
   + known as .KULbginline[tree correlation]
 
 --
 
-Remember the .hi-pink[feature importance] results discussed earlier for the MTPL data? 
+* Remember the .hi-pink[feature importance] results earlier? 
   
   + `bm` is a very dominant variable
   + `ageph` was rather important
-  + `power` also, but to a lesser degree.
+  + `power` also, but to a lesser degree
 
 --
 
-Problem?
+* Problem?
   
   + bagging gets its predictive performance from .hi-pink[variance reduction]
   + however, this reduction .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] when tree correlation .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;]
-  + dominant features therefore .hi-pink[hurt] the preditive performance of a bagged ensemble!
+  + dominant features therefore .hi-pink[hurt] the preditive performance of a bagged ensemble
 
 --
 
-Solution?
+* Solution?
   
-  + .KULbginline[Random forest].
+  + .KULbginline[Random forest]
   
 ---
 
 # Random forest
 
-.KULbginline[Random forest] is a modification on bagging to get an ensemble of .hi-pink[de-correlated] trees.
+* .KULbginline[Random forest] is a modification on bagging to get an ensemble of .hi-pink[de-correlated] trees
 
 --
 
-Process is very similar to bagging, with one small .KULbginline[trick]:
-  + before each split, select a .hi-pink[subset of features] at random as candidate features for splitting
-  + this essentially .KUlbginline[decorrelates] the trees in the ensemble, improving predictive performance
-  + the number of candidates is typically considered a .KUlbginline[tuning parameter]
+* Process is very similar to bagging, with one small .KULbginline[trick]:
+  + before each split, select a .hi-pink[subset] of features at random as candidate features for splitting
+  + this essentially .hi-pink[decorrelates] the trees in the ensemble, improving predictive performance
+  + the number of candidates is typically considered a .hi-pink[tuning parameter]
 
 --
 
-.KULbginline[Bagging] introduces randomness in the .hi-pink[rows] of the data.
+* .KULbginline[Bagging] introduces randomness in the .hi-pink[rows] of the data
 
 --
 
-.KULbginline[Random forest] introduces randomness in the .KULbginline[rows] and .KULbginline[columns] of the data.
+* .KULbginline[Random forest] introduces randomness in the .hi-pink[rows] and .hi-pink[columns] of the data
 
 --
 
-Many .hi-pink[packages] available, but a couple of popular ones: 
+* Many .hi-pink[packages] available, but a couple of popular ones .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z"/&gt;&lt;/svg&gt;]
   + {randomForest}: standard for regression and classification, but not very fast
   + {randomForestSRC}: fast OpenMP implementation for survival, regression and classification
-  + {ranger}: fast C++ implementation for survival, regression and classification.
+  + {ranger: fast C++ implementation for survival, regression and classification
 
 ---
 
@@ -2568,13 +2436,14 @@ class: clear
 
 ]
 
+--
 
 .right-column[
-.hi-pink[Q]: let's investigate the issue of dominant features.
+Let's investigate the issue of dominant features.
 
-1. Take .KULbginline[two bootstrap samples] from the .KULbginline[MTPL] data.
+1. Take .hi-pink[two bootstrap samples] from the .KULbginline[MTPL] data.
 
-1. Fit a regression tree of .KULbginline[depth = 3] to each sample.
+1. Fit a regression tree of .hi-pink[depth = 3] to each sample.
 
 1. Check the resulting tree structures.
 ]
@@ -2584,8 +2453,7 @@ class: clear
 class:clear
 
 .pull-left[
-.hi-pink[Q1]: two bootstrap samples
-
+.hi-pink[Q1]: two bootstrap samples:
 
 ```r
 set.seed(486291) # reproducibility
@@ -2605,7 +2473,7 @@ mtpl_b2 &lt;- mtpl %&gt;% dplyr::slice(bsample_2)
 ]
 
 .pull-right[
-.hi-pink[Q2]: Poisson regression tree for each sample
+.hi-pink[Q2]: Poisson regression tree for each sample:
 
 ```r
 fit_b1 &lt;- rpart(formula = 
@@ -2638,7 +2506,7 @@ fit_b2 &lt;- rpart(formula =
 
 class:clear
 
-.hi-pink[Q3]: the resulting tree structures
+.hi-pink[Q3]: the resulting tree structures:
 .pull-left[
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-129-1.png" style="display: block; margin: auto;" /&gt;
 ]
@@ -2646,6 +2514,15 @@ class:clear
 .pull-right[
 &lt;img src="ML_part2_files/figure-html/unnamed-chunk-130-1.png" style="display: block; margin: auto;" /&gt;
 ]
+
+---
+
+class: inverse, center, middle
+name: bag
+
+# Tuning
+
+&lt;html&gt;&lt;div style='float:left'&gt;&lt;/div&gt;&lt;hr color='#FAFAFA' size=1px width=796px&gt;&lt;/html&gt;
 
 ---
 
@@ -2671,21 +2548,21 @@ ranger(formula, data, num.trees, mtry, min.node.size, max.depth,
 
 * `oob.error`: boolean indication to calculate the .hi-pink[OOB] error
 
-* `num.threads` and `seed`: number of threads and random seed.
+* `num.threads` and `seed`: number of threads and random seed
 
 ---
 
-# Tuning strategy for random forests
+# Tuning strategy
 
 .pull-left[
-Many .KULbginline[tuning] parameters in a .hi-pink[random forest]:
+* Many .KULbginline[tuning] parameters in a .hi-pink[random forest]:
   + number of trees
   + number of candidates for splitting
   + max tree depth
   + minimun leaf node size
-  + sample fraction.
+  + sample fraction
 
-Construct a full .KULbginline[Cartesian] grid via `expand.grid`:
+* Set up a full .KULbginline[Cartesian] grid via `expand.grid`:
 
 
 ```r
@@ -2721,10 +2598,10 @@ print(search_grid)
 
 ---
 
-# Tuning strategy for random forests (cont.)
+# Tuning strategy
 
 .pull-left[
-Perform a .KULbginline[grid search] and track the .KULbginline[OOB error]:
+Perform a .KULbginline[grid search] and track the .hi-pink[OOB error]:
 
 ```r
 library(ranger)
@@ -2774,21 +2651,21 @@ The .hi-pink[Mean Squared Error], but does that make sense for us?
 
 ---
 
-# Random forests for actuaries &lt;img src="img/distRforest.png" class="title-hex"&gt;
+# Random forest for actuaries
   
-All available random forest packages only support .KULbginline[standard regression] based on the .hi-pink[Mean Squared Error]
+* All available random forest packages only support .KULbginline[standard regression] based on the .hi-pink[Mean Squared Error]
   
   + no Poisson, Gamma or log-normal loss functions available
-  + bad news for actuaries.
+  + bad news for actuaries .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;]
 
 --
   
-Possible solution: the {distRforest} package on Roel's [GitHub]([https://github.com/henckr/distRforest) .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;]
+* Possible solution: the {distRforest} package on Roel's [GitHub]([https://github.com/henckr/distRforest) .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M165.9 397.4c0 2-2.3 3.6-5.2 3.6-3.3.3-5.6-1.3-5.6-3.6 0-2 2.3-3.6 5.2-3.6 3-.3 5.6 1.3 5.6 3.6zm-31.1-4.5c-.7 2 1.3 4.3 4.3 4.9 2.6 1 5.6 0 6.2-2s-1.3-4.3-4.3-5.2c-2.6-.7-5.5.3-6.2 2.3zm44.2-1.7c-2.9.7-4.9 2.6-4.6 4.9.3 2 2.9 3.3 5.9 2.6 2.9-.7 4.9-2.6 4.6-4.6-.3-1.9-3-3.2-5.9-2.9zM244.8 8C106.1 8 0 113.3 0 252c0 110.9 69.8 205.8 169.5 239.2 12.8 2.3 17.3-5.6 17.3-12.1 0-6.2-.3-40.4-.3-61.4 0 0-70 15-84.7-29.8 0 0-11.4-29.1-27.8-36.6 0 0-22.9-15.7 1.6-15.4 0 0 24.9 2 38.6 25.8 21.9 38.6 58.6 27.5 72.9 20.9 2.3-16 8.8-27.1 16-33.7-55.9-6.2-112.3-14.3-112.3-110.5 0-27.5 7.6-41.3 23.6-58.9-2.6-6.5-11.1-33.3 2.6-67.9 20.9-6.5 69 27 69 27 20-5.6 41.5-8.5 62.8-8.5s42.8 2.9 62.8 8.5c0 0 48.1-33.6 69-27 13.7 34.7 5.2 61.4 2.6 67.9 16 17.7 25.8 31.5 25.8 58.9 0 96.5-58.9 104.2-114.8 110.5 9.2 7.9 17 22.9 17 46.4 0 33.7-.3 75.4-.3 83.6 0 6.5 4.6 14.4 17.3 12.1C428.2 457.8 496 362.9 496 252 496 113.3 383.5 8 244.8 8zM97.2 352.9c-1.3 1-1 3.3.7 5.2 1.6 1.6 3.9 2.3 5.2 1 1.3-1 1-3.3-.7-5.2-1.6-1.6-3.9-2.3-5.2-1zm-10.8-8.1c-.7 1.3.3 2.9 2.3 3.9 1.6 1 3.6.7 4.3-.7.7-1.3-.3-2.9-2.3-3.9-2-.6-3.6-.3-4.3.7zm32.4 35.6c-1.6 1.3-1 4.3 1.3 6.2 2.3 2.3 5.2 2.6 6.5 1 1.3-1.3.7-4.3-1.3-6.2-2.2-2.3-5.2-2.6-6.5-1zm-11.4-14.7c-1.6 1-1.6 3.6 0 5.9 1.6 2.3 4.3 3.3 5.6 2.3 1.6-1.3 1.6-3.9 0-6.2-1.4-2.3-4-3.3-5.6-2z"/&gt;&lt;/svg&gt;]
   
-  + based on {rpart} which supports .KULbginline[Poisson] regression (as we have seen before)
-  + extended to support .KULbginline[Gamma] and .KULbginline[log-normal] deviance as loss function
-  + extended to support .KULbginline[random forest] generation
-  + this package is used in [Henckaerts et al. (2020)](https://arxiv.org/abs/1904.10890).
+  + based on {rpart} which supports .hi-pink[Poisson] regression (as we have seen before)
+  + extended to support .hi-pink[Gamma] and .hi-pink[log-normal] deviance as loss function
+  + extended to support .hi-pink[random forest] generation
+  + this package is used in [Henckaerts et al. (2020)](https://arxiv.org/abs/1904.10890)
 
 ---
 
@@ -2807,99 +2684,91 @@ background-size: contain
 
 ---
 
-# Boosting vs. bagging
+# Boosting
 
-Similar to bagging, boosting is a .KULbginline[general technique] to create an .KULbginline[ensemble] of any type of base learner.
+* Similar to bagging, boosting is a .hi-pink[general technique] to create an .KULbginline[ensemble] of any type of base learner
 
 --
 
-However, there are some .KULbginline[key differences] between both approaches:
+* However, there are some .KULbginline[key differences] between both approaches:
 
 .pull-left[
-
-With .KULbginline[bagging]:
-
-* .KULbginline[Strong base learners]
+.KULbginline[Bagging]
+* .hi-pink[Strong base learners]
   + low bias, high variance
   + for example: deep trees
-* .KULbginline[Variance reduction] in ensemble through .KULbginline[averaging]
+* .hi-pink[Variance reduction] in ensemble through .KULbginline[averaging]
 * .KULbginline[Parallel] approach
   + trees not using information from each other
   + performance thanks to .hi-pink[averaging]
-  + low risk for overfitting.
+  + low risk for overfitting
 ]
 
 .pull-right[
-
-With .KULbginline[boosting]:
-
-* .KULbginline[Weak base learners]
+.KULbginline[Boosting]
+* .hi-pink[Weak base learners]
   + low variance, high bias
   + for example: stumps
-* .KULbginline[Bias reduction] in ensemble through .KULbginline[updates]
+* .hi-pink[Bias reduction] in ensemble through .KULbginline[updates]
 * .KULbginline[Sequential] approach
   + current tree uses information from all past trees
   + performance thanks to .hi-pink[rectifying] past mistakes
-  + high risk for overfitting.
+  + high risk for overfitting
 ]
 
 ---
 
 # GBM: stochastic gradient boosting with trees
 
-.left-column[
-We focus on .KULbginline[GBM]:
-  + stochastic gradient boosting with .KULbginline[decision trees]
-  + stochastic: .KULbginline[subsampling] in the rows (and columns) of the data
-  + gradient: optimizing the loss function via .KULbginline[gradient descent].
-]
+* We focus on .KULbginline[GBM], performing .hi-pink[stochastic gradient boosting] with .KULbginline[decision trees]
+  + stochastic: .hi-pink[subsampling] in the rows (and columns) of the data
+  + gradient: optimizing the loss function via .hi-pink[gradient descent]
 
-.right-column[
-
-&lt;img src="img/gradient_descent.png" width="85%" style="display: block; margin: auto;" /&gt;
-&lt;br&gt; Figure 12.3 from Boehmke &amp; Greenwell [Hands-on machine learning with R](https://bradleyboehmke.github.io/HOML/gbm.html).
+.center[
+&lt;img src="img/gradient_descent.png" width="55%" style="display: block; margin: auto;" /&gt;
+&lt;br&gt; Figure 12.3 from Bradley Boehmke's [HOML](https://bradleyboehmke.github.io/HOML/gbm.html)
 ]
 
 ---
 
 # Stochastic gradient descent
 
-The .KULbginline[learning rate] (also called step size) is very important in gradient descent
+* The .KULbginline[learning rate] (also called step size) is very important in gradient descent
   + too big: likely to .hi-pink[overshoot] the optimal solution
   + too small: .hi-pink[slow] process to reach the optimal solution
   
 .center[
 &lt;img src="img/learning_rate.png" width="80%" style="display: block; margin: auto;" /&gt;
-&lt;br&gt; Figure 12.4 from Boehmke &amp; Greenwell [Hands-on machine learning with R](https://bradleyboehmke.github.io/HOML/gbm.html).
+&lt;br&gt; Figure 12.4 from Bradley Boehmke's [HOML](https://bradleyboehmke.github.io/HOML/gbm.html)
 ]
 
 --
 
-.KULbginline[Subsampling] allows to escape plateaus or local minima for .hi-pink[non-convex] loss functions.
+* .KULbginline[Subsampling] allows to escape plateaus or local minima for .hi-pink[non-convex] loss functions
 
 ---
 
 # GBM training process
 
-.KULbginline[Initialize] the model fit with a global average and calculate .hi-pink[pseudo-residuals].
+* .KULbginline[Initialize] the model fit with a global average and calculate .hi-pink[pseudo-residuals]
 
 --
 
-Do the following .KULbginline[B] times:
-  + fit a tree of a pre-specified depth to the .KULbginline[pseudo-residuals]
-  + .KULbginline[update] the model fit and pseudo-residuals with a .KULbginline[shrunken] version 
-  + shrinkage to slow down learning and .KULbginline[prevent] overfitting.
+* Do the following .KULbginline[B] times:
+  + fit a tree of a pre-specified depth to the .hi-pink[pseudo-residuals]
+  + .KULbginline[update] the model fit and pseudo-residuals with a .hi-pink[shrunken] version 
+  + shrinkage to slow down learning and .hi-pink[prevent] overfitting
 
 --
 
-The model fit after B iterations is the .KULbginline[end product].
+* The model fit after B iterations is the .KULbginline[end product]
 
 --
 
-Some .KULbginline[popular] packages for stochastic gradient boosting 
-  + {gbm}: standard for regression and classification, but not the fastest
-  + {gbm3}: faster version of {gbm} via parallel processing, but not backwards compatible
-  + {xgboost}: efficient implementation with some .hi-pink[extra] elements, for example regularization.
+* Some .KULbginline[popular] packages for stochastic gradient boosting .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 640 512"&gt;&lt;path d="M425.7 256c-16.9 0-32.8-9-41.4-23.4L320 126l-64.2 106.6c-8.7 14.5-24.6 23.5-41.5 23.5-4.5 0-9-.6-13.3-1.9L64 215v178c0 14.7 10 27.5 24.2 31l216.2 54.1c10.2 2.5 20.9 2.5 31 0L551.8 424c14.2-3.6 24.2-16.4 24.2-31V215l-137 39.1c-4.3 1.3-8.8 1.9-13.3 1.9zm212.6-112.2L586.8 41c-3.1-6.2-9.8-9.8-16.7-8.9L320 64l91.7 152.1c3.8 6.3 11.4 9.3 18.5 7.3l197.9-56.5c9.9-2.9 14.7-13.9 10.2-23.1zM53.2 41L1.7 143.8c-4.6 9.2.3 20.2 10.1 23l197.9 56.5c7.1 2 14.7-1 18.5-7.3L320 64 69.8 32.1c-6.9-.8-13.5 2.7-16.6 8.9z"/&gt;&lt;/svg&gt;]
+  + {gbm}: .hi-pink[standard] for regression and classification, but not the fastest
+  + {gbm3}: .hi-pink[faster] version of {gbm} via parallel processing, but not backwards compatible
+  + {xgboost}: efficient implementation with some .hi-pink[extra] elements, for example regularization
 
 ---
 
@@ -2927,32 +2796,32 @@ gbm(formula, data, distribution, var.monotone, n.trees,
   
 * `bag.fraction`: fraction of observations to sample for building the next tree
 
-* `cv.folds`: number of cross-validation folds to perform.
+* `cv.folds`: number of cross-validation folds to perform
 
 ---
 
 # GBM parameters
 
-A lot of parameters at our disposal to .KULbginline[tweak] the GBM.
+* A lot of .hi-pink[parameters] available to .KULbginline[tweak] the GBM
 
 --
 
-Some have a .KULbginline[big impact] on the performance and should therefore be .KULbginline[properly tuned]
+* Some have a .KULbginline[big impact] on the performance and should therefore be .hi-pink[properly tuned]
   + `n.trees`: depends very much on the .hi-pink[use case], ranging from 100's to 10 000's
   + `interaction.depth`: .hi-pink[low] values are preferred for boosting to obtain weak base learners
-  + `shrinkage`: typically set to the lowest possible value that is .hi-pink[computationally] feasible.
+  + `shrinkage`: typically set to the lowest possible value that is .hi-pink[computationally] feasible
 
 --
 
-.hi-pink[Rule of thumb]: if `shrinkage` .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] then `ntrees` .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;].
+* .hi-pink[Rule of thumb]: if `shrinkage` .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M504 256c0 137-111 248-248 248S8 393 8 256 119 8 256 8s248 111 248 248zm-143.6-28.9L288 302.6V120c0-13.3-10.7-24-24-24h-16c-13.3 0-24 10.7-24 24v182.6l-72.4-75.5c-9.3-9.7-24.8-9.9-34.3-.4l-10.9 11c-9.4 9.4-9.4 24.6 0 33.9L239 404.3c9.4 9.4 24.6 9.4 33.9 0l132.7-132.7c9.4-9.4 9.4-24.6 0-33.9l-10.9-11c-9.5-9.5-25-9.3-34.3.4z"/&gt;&lt;/svg&gt;] then `ntrees` .font150[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 512 512"&gt;&lt;path d="M8 256C8 119 119 8 256 8s248 111 248 248-111 248-248 248S8 393 8 256zm143.6 28.9l72.4-75.5V392c0 13.3 10.7 24 24 24h16c13.3 0 24-10.7 24-24V209.4l72.4 75.5c9.3 9.7 24.8 9.9 34.3.4l10.9-11c9.4-9.4 9.4-24.6 0-33.9L273 107.7c-9.4-9.4-24.6-9.4-33.9 0L106.3 240.4c-9.4 9.4-9.4 24.6 0 33.9l10.9 11c9.6 9.5 25.1 9.3 34.4-.4z"/&gt;&lt;/svg&gt;]
 
 --
 
-Let's have a look at the .KULbginline[impact] of these tuning parameters.
+* Let's have a look at the .KULbginline[impact] of these .hi-pink[tuning parameters]
 
 ---
 
-# GBM parameters (cont.)
+# GBM parameters
 
 .pull-left[
 Fit a GBM of 10 .KULbginline[stumps], .hi-pink[without] applying shrinkage:
@@ -2981,7 +2850,7 @@ pred &lt;- predict(fit,
 
 ---
 
-# GBM parameters (cont.)
+# GBM parameters
 
 .pull-left[
 Fit a GBM of 10 .KULbginline[stumps], .hi-pink[with] shrinkage:
@@ -2997,10 +2866,9 @@ fit &lt;- gbm(formula = y ~ x,
            ) 
 ```
 
-Applying shrinkage .KULbginline[slows down] the learning process: &lt;br&gt;
-
-* .hi-pink[avoids] overfitting &lt;br&gt;
-* but we need more trees and .hi-pink[longer] training time.
+Applying shrinkage .KULbginline[slows down] the learning process &lt;br&gt;
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM112 223.4c3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.7 8.6-10.8 11.9-14.9 4.5l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.3 7.4-15.8 4-15.1-4.5zm250.8 122.8C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.5-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.6-16.2 38.1 4.3 24.6 20.5zm6.2-118.3l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.1 7.3-15.6 4-14.9-4.5 3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.6 8.6-11 11.9-15.1 4.5z"/&gt;&lt;/svg&gt;] .hi-pink[avoids] overfitting &lt;br&gt;
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;] need more trees and .hi-pink[longer] training time
 ]
 
 
@@ -3012,7 +2880,7 @@ Applying shrinkage .KULbginline[slows down] the learning process: &lt;br&gt;
 
 ---
 
-# GBM parameters (cont.)
+# GBM parameters
 
 .pull-left[
 Fit a GBM of 10 .KULbginline[shallow] trees, .hi-pink[with] shrinkage:
@@ -3028,10 +2896,9 @@ fit &lt;- gbm(formula = y ~ x,
            ) 
 ```
 
-Increasing tree .KULbginline[depth] allows more versatile splits: &lt;br&gt;
-
-* .hi-pink[faster] learning &lt;br&gt;
-* risk of .hi-pink[overfitting] (shrinkage important!) &lt;br&gt;
+Increasing tree .KULbginline[depth] allows more versatile splits &lt;br&gt;
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM112 223.4c3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.7 8.6-10.8 11.9-14.9 4.5l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.3 7.4-15.8 4-15.1-4.5zm250.8 122.8C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.5-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.6-16.2 38.1 4.3 24.6 20.5zm6.2-118.3l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.1 7.3-15.6 4-14.9-4.5 3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.6 8.6-11 11.9-15.1 4.5z"/&gt;&lt;/svg&gt;] .hi-pink[faster] learning &lt;br&gt;
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;] risk of .hi-pink[overfitting] (shrinkage important!) &lt;br&gt;
 
 .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] `interaction.depth &gt; 1` allows for .KULbginline[interactions]!
 ]
@@ -3042,7 +2909,7 @@ Increasing tree .KULbginline[depth] allows more versatile splits: &lt;br&gt;
 
 ---
 
-# GBM parameters (cont.)
+# GBM parameters
 
 .pull-left[
 Fit a GBM of 10 .KULbginline[shallow] trees, .hi-pink[without] shrinkage:
@@ -3058,11 +2925,9 @@ fit &lt;- gbm(formula = y ~ x,
            ) 
 ```
 
-The .hi-pink[danger] for overfitting is real! &lt;br&gt;
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zm80 168c17.7 0 32 14.3 32 32s-14.3 32-32 32-32-14.3-32-32 14.3-32 32-32zM152 416c-26.5 0-48-21-48-47 0-20 28.5-60.4 41.6-77.8 3.2-4.3 9.6-4.3 12.8 0C171.5 308.6 200 349 200 369c0 26-21.5 47-48 47zm16-176c-17.7 0-32-14.3-32-32s14.3-32 32-32 32 14.3 32 32-14.3 32-32 32zm170.2 154.2C315.8 367.4 282.9 352 248 352c-21.2 0-21.2-32 0-32 44.4 0 86.3 19.6 114.7 53.8 13.8 16.4-11.2 36.5-24.5 20.4z"/&gt;&lt;/svg&gt;] The .hi-pink[danger] for overfitting is real &lt;br&gt;
 
-.KULbginline[Rule of thumb]: 
-
-* set `shrinkage &lt;= 0.01` and adjust `n.trees` accordingly (.hi-pink[computational constraint]).
+.KULbginline[Rule of thumb]: set `shrinkage &lt;= 0.01` and adjust `n.trees` accordingly (.hi-pink[computational constraint])
 ]
 
 .pull-right[
@@ -3089,7 +2954,7 @@ fit &lt;- gbm(formula = y ~ x,
 
 .font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 496 512"&gt;&lt;path d="M248 8C111 8 0 119 0 256s111 248 248 248 248-111 248-248S385 8 248 8zM112 223.4c3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.7 8.6-10.8 11.9-14.9 4.5l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.3 7.4-15.8 4-15.1-4.5zm250.8 122.8C334.3 380.4 292.5 400 248 400s-86.3-19.6-114.8-53.8c-13.5-16.3 11-36.7 24.6-20.5 22.4 26.9 55.2 42.2 90.2 42.2s67.8-15.4 90.2-42.2c13.6-16.2 38.1 4.3 24.6 20.5zm6.2-118.3l-9.5-17c-7.7-13.7-19.2-21.6-31.5-21.6s-23.8 7.9-31.5 21.6l-9.5 17c-4.1 7.3-15.6 4-14.9-4.5 3.3-42.1 32.2-71.4 56-71.4s52.7 29.3 56 71.4c.6 8.6-11 11.9-15.1 4.5z"/&gt;&lt;/svg&gt;] Look at that nice fit! &lt;br&gt;
 
-.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] Always .KULbginline[beware] of .hi-pink[overfitting] when adding trees!
+.font200[&lt;svg style="height:0.8em;top:.04em;position:relative;fill:#116E8A;" viewBox="0 0 576 512"&gt;&lt;path d="M576 240c0-23.63-12.95-44.04-32-55.12V32.01C544 23.26 537.02 0 512 0c-7.12 0-14.19 2.38-19.98 7.02l-85.03 68.03C364.28 109.19 310.66 128 256 128H64c-35.35 0-64 28.65-64 64v96c0 35.35 28.65 64 64 64h33.7c-1.39 10.48-2.18 21.14-2.18 32 0 39.77 9.26 77.35 25.56 110.94 5.19 10.69 16.52 17.06 28.4 17.06h74.28c26.05 0 41.69-29.84 25.9-50.56-16.4-21.52-26.15-48.36-26.15-77.44 0-11.11 1.62-21.79 4.41-32H256c54.66 0 108.28 18.81 150.98 52.95l85.03 68.03a32.023 32.023 0 0 0 19.98 7.02c24.92 0 32-22.78 32-32V295.13C563.05 284.04 576 263.63 576 240zm-96 141.42l-33.05-26.44C392.95 311.78 325.12 288 256 288v-96c69.12 0 136.95-23.78 190.95-66.98L480 98.58v282.84z"/&gt;&lt;/svg&gt;] Always .KULbginline[beware] of .hi-pink[overfitting] when adding trees
 ]
 
 .pull-right[
@@ -3110,9 +2975,10 @@ class: clear
 
 ]
 
+--
 
 .right-column[
-.hi-pink[Q]: use the previous code to .hi-pink[experiment] with your .KULbginline[GBM parameters] of choice (see `?gbm`).
+Use the previous code to .hi-pink[experiment] with your .KULbginline[GBM parameters] of choice (see `?gbm`).
 ]
 
 ---
@@ -3227,15 +3093,16 @@ class: clear
 
 ]
 
+--
 
 .right-column[
-.hi-pink[Q]: complete the code below to find the .hi-pink[optimal combination] of .KULbginline[tuning parameters].
+Complete the code below to find the .hi-pink[optimal combination] of .KULbginline[tuning parameters].
 
 1. Set up a search grid.
 
 1. Fit a GBM for each combination op parameters.
 
-1. Extract the OOB performance for each GBM. &lt;br&gt; .KULbginline[Beware:] a fitted `gbm` object returns the .hi-pink[improvements] in OOB error via `$oobag.improve`.
+1. Extract the OOB performance for each GBM. .KULbginline[Beware:] a fitted `gbm` object returns the .hi-pink[improvements] in OOB error via `$oobag.improve`.
 
 
 ```r
@@ -3300,7 +3167,7 @@ my_grid %&gt;% dplyr::arrange(desc(oob_improv))
 
 &lt;br&gt;
 
-Another tuning option is to set `cv.folds &gt; 0` and track the .KULbginline[cross-validation] error via `fit$cv.error`. &lt;br&gt; &lt;br&gt;
+Another tuning option is to set `cv.folds &gt; 0` and track the .KULbginline[cross-validation] error via `fit$cv.error`. &lt;br&gt;
 That would be a more general approach but also .hi-pink[more time-consuming].
 
 ---
@@ -3338,13 +3205,13 @@ fit &lt;- gbm(formula = nclaims ~
 ]
 
 .pull-right[
-- Include the log of exposure as an .KULbginline[offset].
+- Include the log of exposure as an .hi-pink[offset]
 
-- Specify the .KULbginline[Poisson] distribution for the target.
+- Specify the .hi-pink[Poisson] distribution for the target
 
-- Impose a .KULbginline[monotonically increasing] constraint on `bm`.
+- Impose a .hi-pink[monotonically increasing] constraint on `bm`
 
-- Perform .KULbginline[stochastic] gradient boosting with `bag.fraction &lt; 1`.
+- Perform .hi-pink[stochastic] gradient boosting with `bag.fraction &lt; 1`
 ]
 ---
 
@@ -3471,7 +3338,7 @@ From the `gbm` help on the `distribution` argument:
 
 &gt; Currently available options are "gaussian" (squared error), "laplace" (absolute loss), "tdist" (t-distribution loss), "bernoulli" (logistic regression for 0-1 outcomes), "huberized" (huberized hinge loss for 0-1 outcomes), "adaboost" (the AdaBoost exponential loss for 0-1 outcomes), "poisson" (count outcomes), "coxph" (right censored observations), "quantile", or "pairwise" (ranking measure using the LambdaMart algorithm)
 
-Which to choose for .KULbginline[claim severity]?
+Which to choose for .hi-pink[claim severity]?
 
 --
 
@@ -3496,15 +3363,15 @@ name: bag
 
 # XGBoost
 
-.KULbginline[XGBoost] stands for e.hi-pink[X]treme .hi-pink[G]radient .hi-pink[Boost]ing.
+* .KULbginline[XGBoost] stands for e.hi-pink[X]treme .hi-pink[G]radient .hi-pink[Boost]ing
 
 --
 
-Optimized gradient boosting library: efficient, flexible and portable across multiple languages.
+* Optimized gradient boosting library: efficient, flexible and portable across multiple languages
 
 --
 
-XGBoost follows the same general boosting approach as GBM, but adds some .KULbginline[extra elements]:
+* XGBoost follows the same general boosting approach as GBM, but adds some .KULbginline[extra elements]:
   + .hi-pink[regularization]: extra protection against overfitting (see Lasso and glmnet on Day 1)
   + .hi-pink[early stopping]: stop model tuning when improvement slows down
   + .hi-pink[parallel processing]: can deliver huge speed gains
@@ -3513,13 +3380,13 @@ XGBoost follows the same general boosting approach as GBM, but adds some .KULbgi
 
 --
 
-XGBoost also allows to .KULbginline[subsample columns] in the data, much like the random forest did
+* XGBoost also allows to .KULbginline[subsample columns] in the data, much like the random forest did
   + GBM only allowed subsampling of rows
-  + XGBoost therefore .hi-pink[unites] boosting and random forest to some extent.
+  + XGBoost therefore .hi-pink[unites] boosting and random forest to some extent
 
 --
 
-Very .KULbginline[flexible] method with many many parameters, full list can be found [here](https://xgboost.readthedocs.io/en/latest/parameter.html).  
+* Very .KULbginline[flexible] method with many many parameters, full list can be found [here](https://xgboost.readthedocs.io/en/latest/parameter.html)  
 
 ---
 
@@ -3705,7 +3572,7 @@ xgb.plot.multi.trees(
 
 # Cross-validation with XGBoost
 
-.KULbginline[Built-in cross-validation] with `xgb.cv`
+* .KULbginline[Built-in cross-validation] with `xgb.cv`
   + same interface as the `xgboost` function
   + add `nfolds` to define the .hi-pink[number of folds]
   + add `stratified` for .hi-pink[stratification]
@@ -3733,7 +3600,7 @@ xval &lt;- xgb.cv(data = mtpl_xgb,
 
 # Cross-validation results
 
-Get the cross-validation .KULbginline[results] via `$evaluation_log`:
+* Get the cross-validation .KULbginline[results] via `$evaluation_log`:
 
 
 ```r
@@ -3792,6 +3659,7 @@ class: clear
 
 ]
 
+--
 
 .right-column[
 .KULbginline[That's a wrap] on .hi-pink[tree-based ML]! Now it's your time to experiment. &lt;br&gt;
