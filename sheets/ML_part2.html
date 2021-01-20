@@ -153,7 +153,7 @@ name: why-this-course # inspired by Grant McDermott intro lecture
  - from bagging to random forests
  - tuning
 
-* [Gradient boosting](#gb)
+* [Gradient boosting](#gbm)
 
  - (stochastic) gradient boosting with trees
  - training process and tuning parameters
@@ -255,7 +255,7 @@ The top of the tree contains all available training observations: the .hi-pink[r
 
 --
 
-We .KULbginline[partition] the data into homogeneous non-overlapping subgroups: the .hi-pink[nodes]
+We .KULbginline[partition] the data into homogeneous non-overlapping subgroups: the .hi-pink[nodes].
 
 --
 
@@ -2523,7 +2523,7 @@ pred &lt;- predict(fit,
 ---
 
 class: inverse, center, middle
-name: bag
+name: rf
 
 # From bagging to random forests
 
@@ -2804,8 +2804,6 @@ The .hi-pink[Mean Squared Error], but does that make sense for us?
 
 # Random forests for actuaries 
   
-
-
 All available random forest packages (in R) only support .KULbginline[standard regression] based on the .hi-pink[Mean Squared Error]:
 
 - no Poisson, Gamma or log-normal loss functions available
@@ -2838,7 +2836,7 @@ The {distRforest} package on Roel's [GitHub]([https://github.com/henckr/distRfor
 ---
 
 class: inverse, center, middle
-name: bag
+name: gbm
 
 # (Stochastic) Gradient Boosting Machines
 
@@ -3183,7 +3181,6 @@ Monotonic decreasing fit via `var.monotone = -1`:
 ---
 
 class: inverse, center, middle
-name: bag
 
 # Tuning GBMs
 
@@ -3358,7 +3355,7 @@ That would be a more general approach but also .hi-pink[more time-consuming].
 ---
 
 class: inverse, center, middle
-name: bag
+name: gbm-freq
 
 # Claim frequency and severity modeling with {gbm}
 
@@ -3538,7 +3535,7 @@ devtools::install_github("harrysouthworth/gbm")
 ---
 
 class: inverse, center, middle
-name: bag
+name: XGBoost
 
 # XGBoost
 
