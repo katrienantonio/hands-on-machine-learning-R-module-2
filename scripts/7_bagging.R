@@ -10,7 +10,7 @@ set.seed(54321) # reproducibility
 dfr <- tibble::tibble(
   x = seq(0, 2 * pi, length.out = 500),
   m = 2 * sin(x),
-  y = m + rnorm(length(x), sd = 1))
+  y = m + rnorm(length(x), sd = 1)) 
 
 
 ## --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -33,10 +33,10 @@ library(rpart)
 fit_b1 <- rpart(formula = y ~ x,
                 data = dfr_b1,
                 method = 'anova',
-                control = rpart.control(maxdepth = 20,
-                                        minsplit = 10,
-                                        minbucket = 5,
-                                        cp = 0))
+                control = rpart.control(maxdepth = 30,
+                                        minsplit = 20,
+                                        minbucket = 3,
+                                        cp = 0.01))
 
 
 ## --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -54,10 +54,10 @@ plot_pred_reg(dt = dfr, preds = predict(fit_b1, dfr))
 fit_b2 <- rpart(formula = y ~ x,
                 data = dfr_b2,
                 method = 'anova',
-                control = rpart.control(maxdepth = 20,
-                                        minsplit = 10,
-                                        minbucket = 5,
-                                        cp = 0))
+                control = rpart.control(maxdepth = 30,
+                                        minsplit = 20,
+                                        minbucket = 3,
+                                        cp = 0.01))
 
 
 ## --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -103,10 +103,10 @@ fit <- ipred::bagging(formula = y ~ x,
                       nbagg = 200,
                       ns = nrow(dfr),
                       coob = TRUE,
-                      control = rpart.control(maxdepth = 20,
-                                              minsplit = 40,
-                                              minbucket = 20,
-                                              cp = 0))
+                      control = rpart.control(maxdepth = 30,
+                                              minsplit = 20,
+                                              minbucket = 3,
+                                              cp = 0.01))
 
 
 ## --------------------------------------------------------------------------------------------------------------------------------------------------
@@ -127,10 +127,10 @@ for(i in 1:length(nbags)){
                         nbagg = nbags[i],
                         ns = nrow(dfr),
                         coob = TRUE,
-                        control = rpart.control(maxdepth = 20,
-                                                minsplit = 40,
-                                                minbucket = 20,
-                                                cp = 0))
+                        control = rpart.control(maxdepth = 30,
+                                                minsplit = 20,
+                                                minbucket = 3,
+                                                cp = 0.01))
   oob[i] <- fit$err
 }
 
@@ -168,6 +168,5 @@ plot_pred_class <- function(dt, preds){
 
 # See ?ipred::predict.classbagg for prediction arguments
 preds <- predict(fit, dfc, type = 'class', aggregation = 'majority')
-
 
 
