@@ -2156,10 +2156,10 @@ fit_b1 &lt;- rpart(formula = y ~ x,
 *            data = dfr_b1,
              method = 'anova',
              control = rpart.control(
-*              maxdepth = 20,
-*              minsplit = 10,
-*              minbucket = 5,
-*              cp = 0
+*              maxdepth = 30,
+*              minsplit = 20,
+*              minbucket = 3,
+*              cp = 0.01
                )
              )
 ```
@@ -2184,10 +2184,10 @@ fit_b2 &lt;- rpart(formula = y ~ x,
 *            data = dfr_b2,
              method = 'anova',
              control = rpart.control(
-               maxdepth = 20,
-               minsplit = 10,
-               minbucket = 5,
-               cp = 0
+               maxdepth = 30,
+               minsplit = 20,
+               minbucket = 3,
+               cp = 0.01
                )
              )
 ```
@@ -2276,10 +2276,10 @@ fit_b3 &lt;- rpart(formula = y ~ x,
              data = dfr_b3,
              method = 'anova',
              control = rpart.control(
-               maxdepth = 20,
-               minsplit = 10,
-               minbucket = 5,
-               cp = 0))
+               maxdepth = 30,
+               minsplit = 20,
+               minbucket = 3,
+               cp = 0.01))
 ```
 ]
 
@@ -2331,7 +2331,7 @@ bagging(formula, data, control = rpart.control(___),
   
 * `nbagg`: the number of bagging iterations .KULbginline[B], i.e., the number of trees in the ensemble
 
-* `ns`: number of observations to draw for the bootstrap samples (often less than N to save computational time)
+* `ns`: number of observations to draw for the bootstrap samples (often less than size of training data - say N - to save computational time)
 
 * `coob`: a logical indicating whether an .KULbginline[out-of-bag] estimate of the error rate should be computed.
 
@@ -2409,10 +2409,10 @@ fit &lt;- ipred::bagging(formula = y ~ x,
 *              ns = nrow(dfr),
 *              coob = TRUE,
                control = rpart.control(
-                 maxdepth = 20,
-                 minsplit = 40,
-                 minbucket = 20,
-*                cp = 0)
+                 maxdepth = 30,
+                 minsplit = 20,
+                 minbucket = 3,
+*                cp = 0.01)
                )
 ```
 
@@ -2447,10 +2447,10 @@ for(i in 1:length(nbags)){
                ns = nrow(dfr),
 *              coob = TRUE,
                control = rpart.control(
-                 maxdepth = 20,
-                 minsplit = 40,
-                 minbucket = 20,
-                 cp = 0)
+                 maxdepth = 30,
+                 minsplit = 20,
+                 minbucket = 3,
+                 cp = 0.01)
                )
 * oob[i] &lt;- fit$err
 }
