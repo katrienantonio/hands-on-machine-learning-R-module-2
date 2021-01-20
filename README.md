@@ -8,7 +8,7 @@ Course materials for the *Hands-on Machine Learning in R* course
 Instituut.
 
 📆 Module 1 on December 10 and 17, 2020, Module 2 on Jan 14 and 21, 2021
-and Module 3 on Jan 28 and Feb 4, 2021 <br> 🕞 From 9.30 am to 12.30 pm
+and Module 3 on Jan 28 and Feb 4, 2021 <br> 🕢 From 9.30 am to 12.30 pm
 or from 1.30 pm to 4.30 pm <br> 📌 online, organized by Actuarieel
 Instituut
 
@@ -170,11 +170,13 @@ green button Code \> Download ZIP on the GitHub repo website. As a final
 step, after downloading, unpack the ZIP folder and make sure you can
 easily access the material (in particular scripts and data sets).
 
-Update January 20: please make sure to install the additional packages
-{gifski} and {DiagrammeR} (added below as well).
+**Update January 20**: please make sure to install the additional
+packages {gifski} and {DiagrammeR} (added below as well).
 
 ``` r
-packages <- c("tidyverse", "here", "rstudioapi", "rpart", "rpart.plot", "vip", "pdp", "ipred", "ranger", "gbm", "xgboost", "rstudioapi", "gganimate", "transformr", "Ckmeans.1d.dp", "classInt", "gifski", "DiagrammeR")
+packages <- c("tidyverse", "here", "rstudioapi", "rpart", "rpart.plot", "vip", "pdp", "ipred", 
+              "ranger", "gbm", "xgboost", "rstudioapi", "gganimate", "transformr", 
+              "Ckmeans.1d.dp", "classInt", "gifski", "DiagrammeR")
 
 new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
 if(length(new_packages)) install.packages(new_packages)

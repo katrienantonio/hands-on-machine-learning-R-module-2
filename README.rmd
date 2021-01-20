@@ -142,10 +142,12 @@ required packages (for Module 1, more packages will be added later).
 
 Make sure to **download the course material** (including scripts and data sets) from the GitHub repo one day before the workshop. Use the green button Code > Download ZIP on the GitHub repo website. As a final step, after downloading, unpack the ZIP folder and make sure you can easily access the material (in particular scripts and data sets).
 
-Update January 20: please make sure to install the additional packages {gifski} and {DiagrammeR} (added below as well).
+**Update January 20**: please make sure to install the additional packages {gifski} and {DiagrammeR} (added below as well).
 
 ```{r eval=FALSE}
-packages <- c("tidyverse", "here", "rstudioapi", "rpart", "rpart.plot", "vip", "pdp", "ipred", "ranger", "gbm", "xgboost", "rstudioapi", "gganimate", "transformr", "Ckmeans.1d.dp", "classInt", "gifski", "DiagrammeR")
+packages <- c("tidyverse", "here", "rstudioapi", "rpart", "rpart.plot", "vip", "pdp", "ipred", 
+              "ranger", "gbm", "xgboost", "rstudioapi", "gganimate", "transformr", 
+              "Ckmeans.1d.dp", "classInt", "gifski", "DiagrammeR")
 
 new_packages <- packages[!(packages %in% installed.packages()[,"Package"])]
 if(length(new_packages)) install.packages(new_packages)
