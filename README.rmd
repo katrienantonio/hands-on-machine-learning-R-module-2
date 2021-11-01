@@ -18,15 +18,15 @@ library(emo)
 library(reticulate)
 ```
 
-## Workshop Hands-on Machine Learning in R, September 2021 edition
+## Workshop Hands-on Machine Learning in R, November 2021 edition
 
 by Katrien Antonio, Jonas Crevecoeur and Roel Henckaerts
 
-Course materials for the *Hands-on Machine Learning in R* course (September 2021).
+Course materials for the *Hands-on Machine Learning in R* course (November 2021).
 
-`r emo::ji("calendar")` Module 1 on September 7 & 8, 2021, Module 2 on September 9 & 10, 2021 and Module 3 on September 13 & 14, 2021
+`r emo::ji("calendar")` Module 1 on November 8 & 10, 2021, Module 2 on November 15 & 17, 2021 and Module 3 on November 22 & 24, 2021
 <br>
-`r emo::ji("clock")` From 9.00 am to 12.00 pm or from 1.30 pm to 4.30 pm
+`r emo::ji("clock")` From 9.00 am to 12.00 pm 
 <br>
 `r emo::ji("location")` online, organized by Capgemini Academy and Nationale Nederlanden
 
@@ -61,13 +61,13 @@ The schedule will gradually be completed over the next days. The detailed schedu
 | | | 10.10 - 10.30 | Toy example for classification | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#toy-class) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/4_toy_classification.R) |
 | | | 10.30 - 11.00 | Claim frequency and severity modeling with {rpart} | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#freq-sev-tree) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/5_freq_sev.R) |
 | | | 11.10 - 12.00 | Interpretation tools | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#interpret) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/6_interpretation.R) |
-| Module 2 |  Session 2  | 13.30 - 13.50 | Interpretation tools | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#interpret) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/6_interpretation.R) | |
-| | | 13.50 - 14.30 | Bagging | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#bag) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/7_bagging.R) | |
-| | | 14.40 - 15.10 | Random forests | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#rf) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/8_random_forest.R) and [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/9_tuning_ranger.R)| |
-| | | 15.10 - 15.30 | Gradient boosting | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/10_gbm.R) | |
-| | | 15.40 - 16.00 | Tuning gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/11_tuning_gbm.R) | |
-| | | 16.00 - 16.15 | Claim frequency and severity with gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm-freq) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/12_freq_sev_gbm.R) | |
-| | | 16.15 - 16.30 | Using XGBoost | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#XGBoost) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/13_xgboost.R) | |
+| Module 2 |  Session 2  | 09.00 - 09.20 | Interpretation tools | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#interpret) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/6_interpretation.R) | |
+| | | 09.20 - 10.00 | Bagging | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#bag) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/7_bagging.R) | |
+| | | 10.10 - 10.40 | Random forests | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#rf) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/8_random_forest.R) and [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/9_tuning_ranger.R)| |
+| | | 10.40 - 11.00 | Gradient boosting | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/10_gbm.R) | |
+| | | 11.10 - 11.30 | Tuning gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/11_tuning_gbm.R) | |
+| | | 11.30 - 11.45 | Claim frequency and severity with gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm-freq) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/12_freq_sev_gbm.R) | |
+| | | 11.45 - 12.00 | Using XGBoost | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#XGBoost) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/13_xgboost.R) | |
 
 
 
@@ -172,13 +172,12 @@ analytics, as well as mortality dynamics.</p>
 
 <p align="justify">*Jonas Crevecoeur* is a post-doctoral researcher in biostatistics at KU Leuven. He recently obtained his PhD within the insurance research group at KU Leuven and holds the degrees of MSc in Mathematics, MSc in Insurance Studies and MSc in Financial and Actuarial Engineering (KU Leuven). Before starting the PhD program he worked as an intern with QBE Re (Belgium office) where he studied multiline products and copulas. Jonas was a PhD fellow of the Research Foundation - Flanders (FWO, PhD fellowship fundamental research).</p> 
 
-<p align="justify"> *Roel Henckaerts* is a PhD student in insurance data science at KU
-Leuven. Roel holds the degrees of
+<p align="justify"> *Roel Henckaerts* holds the degrees of
 MSc in Mathematical Engineering, MSc in Insurance Studies and Financial
-and Actuarial Engineering (KU Leuven). Before starting the PhD program
+and Actuarial Engineering (KU Leuven) and PhD in Business Economics (KU Leuven). Before starting the PhD program
 he worked as an intern with AIG (London office) and KBC. Roel is PhD
 fellow of the Research Foundation - Flanders (FWO, PhD fellowship
-strategic basic research). After the completion of his PhD, Roel will join [Prophecy Labs](https://prophecylabs.com/): an AI/ML startup with experience in building end-to-end data solutions that provide concrete business value.</p>
+strategic basic research). After the completion of his PhD, Roel joined [Prophecy Labs](https://prophecylabs.com/): an AI/ML startup with experience in building end-to-end data solutions that provide concrete business value.</p>
 
 
 Happy learning!
