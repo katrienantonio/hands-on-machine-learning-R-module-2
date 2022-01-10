@@ -18,17 +18,17 @@ library(emo)
 library(reticulate)
 ```
 
-## Workshop Hands-on Machine Learning in R, November 2021 edition
+## Workshop Hands-on Machine Learning in R, December 2021 - January 2022 edition
 
 by Katrien Antonio, Jonas Crevecoeur and Roel Henckaerts
 
-Course materials for the *Hands-on Machine Learning in R* course (November 2021).
+Course materials for the *Hands-on Machine Learning in R* course (December 2021 - January 2022).
 
-`r emo::ji("calendar")` Module 1 on November 8 & 10, 2021, Module 2 on November 15 & 17, 2021 and Module 3 on November 22 & 24, 2021
+`r emo::ji("calendar")` Module 1 on December 2 & 9, 2021, Module 2 on January 13 & 20, 2021 and Module 3 on January 27 & February 3, 2021
 <br>
-`r emo::ji("clock")` From 9.00 am to 12.00 pm 
+`r emo::ji("clock")` From 9.30 am to 12.30 pm 
 <br>
-`r emo::ji("location")` online, organized by Capgemini Academy and Nationale Nederlanden
+`r emo::ji("location")` online, organized by Actuarieel Instituut
 
 Course materials will be posted in the week before the workshop. You are now on the landing page for **Module 2: tree-based machine learning methods**.
 
@@ -55,19 +55,19 @@ The schedule will gradually be completed over the next days. The detailed schedu
 |:-----:|:-------:|-----------|-------------|------|------|------|
 | Prework | | your own pace | check the Prework and Software Requirements instructions | | |
 | Prework | | day before the workshop | download the course material from the GitHub repo | | | 
-| Module 2 | Session 1   | 9.00 - 9.20  | Basics of trees | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#tree-basic) |  | |
-| | | 9.20 - 9.40 | Toy example for regression | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#toy-regr) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/2_toy_regression.R) |
-| | | 9.40 - 10.00 | Pruning via cross-validation | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#prune-tree) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/3_pruning_crossval.R) | |
-| | | 10.10 - 10.30 | Toy example for classification | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#toy-class) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/4_toy_classification.R) |
-| | | 10.30 - 11.00 | Claim frequency and severity modeling with {rpart} | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#freq-sev-tree) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/5_freq_sev.R) |
-| | | 11.10 - 12.00 | Interpretation tools | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#interpret) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/6_interpretation.R) |
-| Module 2 |  Session 2  | 09.00 - 09.20 | Interpretation tools | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#interpret) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/6_interpretation.R) | |
-| | | 09.20 - 10.00 | Bagging | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#bag) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/7_bagging.R) | |
-| | | 10.10 - 10.40 | Random forests | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#rf) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/8_random_forest.R) and [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/9_tuning_ranger.R)| |
-| | | 10.40 - 11.00 | Gradient boosting | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/10_gbm.R) | |
-| | | 11.10 - 11.30 | Tuning gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/11_tuning_gbm.R) | |
-| | | 11.30 - 11.45 | Claim frequency and severity with gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm-freq) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/12_freq_sev_gbm.R) | |
-| | | 11.45 - 12.00 | Using XGBoost | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#XGBoost) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/13_xgboost.R) | |
+| Module 2 | Session 1   | 9.30 - 9.50  | Basics of trees | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#tree-basic) |  | |
+| | | 9.50 - 10.10 | Toy example for regression | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#toy-regr) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/2_toy_regression.R) |
+| | | 10.10 - 10.30 | Pruning via cross-validation | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#prune-tree) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/3_pruning_crossval.R) | |
+| | | 10.40 - 11.00 | Toy example for classification | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#toy-class) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/4_toy_classification.R) |
+| | | 11.00 - 11.30 | Claim frequency and severity modeling with {rpart} | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#freq-sev-tree) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/5_freq_sev.R) |
+| | | 11.40 - 12.30 | Interpretation tools | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#interpret) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/6_interpretation.R) |
+| Module 2 |  Session 2  | 09.30 - 09.50 | Interpretation tools | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#interpret) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/6_interpretation.R) | |
+| | | 09.50 - 10.30 | Bagging | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#bag) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/7_bagging.R) | |
+| | | 10.40 - 11.10 | Random forests | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#rf) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/8_random_forest.R) and [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/9_tuning_ranger.R)| |
+| | | 11.10 - 11.30 | Gradient boosting | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/10_gbm.R) | |
+| | | 11.40 - 12.00 | Tuning gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/11_tuning_gbm.R) | |
+| | | 12.00 - 12.15 | Claim frequency and severity with gbm's | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#gbm-freq) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/12_freq_sev_gbm.R) | |
+| | | 12.15 - 12.30 | Using XGBoost | [sheets](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/sheets/ML_part2.html#XGBoost) | [script](https://katrienantonio.github.io/hands-on-machine-learning-R-module-2/scripts/13_xgboost.R) | |
 
 
 
